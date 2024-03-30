@@ -20,7 +20,8 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     private ViaEventStatus _status;
     private ViaEventVisibility _visibility;
     private List<ViaGuestId> _guests;
-
+    private List<ViaInvitation> _invitations;
+    private List<ViaInvitationRequest> _invitationRequests;
     private static ITimeProvider? _timeProvider;
 
     internal new ViaEventId Id => base.Id;
@@ -238,7 +239,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled
             ? OperationResult.Failure(new List<OperationError>
-                {new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")})
+                { new(ErrorCode.BadRequest, "The event cannot be modified in its current state.") })
             : OperationResult.Success();
     }
 
@@ -274,25 +275,25 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         if (_status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
-                {new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.")});
+                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.") });
         }
 
         if (_visibility != ViaEventVisibility.Public)
         {
             return OperationResult.Failure(new List<OperationError>
-                {new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.")});
+                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.") });
         }
 
         if (IsFull())
         {
             return OperationResult.Failure(new List<OperationError>
-                {new OperationError(ErrorCode.Conflict, "The event is full.")});
+                { new OperationError(ErrorCode.Conflict, "The event is full.") });
         }
 
         if (IsParticipant(guestId))
         {
             return OperationResult.Failure(new List<OperationError>
-                {new OperationError(ErrorCode.BadRequest, "The guest is already a participant.")});
+                { new OperationError(ErrorCode.BadRequest, "The guest is already a participant.") });
         }
 
         _guests.Add(guestId);
@@ -332,4 +333,89 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         return _guests.Contains(guestId);
     }
+
+    public OperationResult SendInvitation(ViaInvitation viaInvitation)
+    {
+        if (IsFull())
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.Conflict, "The event is full.")
+            });
+        }
+
+        if (_status != ViaEventStatus.Active)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.Conflict, "The event is not in an active state.")
+            });
+        }
+
+        if (_visibility != ViaEventVisibility.Private)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.Conflict, "The event is not private.")
+            });
+        }
+
+        _invitations.Add(viaInvitation);
+        return OperationResult.Success();
+    }
+
+    public OperationResult AcceptInvitation(ViaInvitationId viaInvitationId)
+    {
+        if (IsFull())
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.Conflict, "The event is full.")
+            });
+        }
+
+        if (_status != ViaEventStatus.Active)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.Conflict, "The event is not in an active state.")
+            });
+        }
+
+        if (_visibility != ViaEventVisibility.Private)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.Conflict, "The event is not private.")
+            });
+        }
+
+        ViaInvitation? viaInvitation = _invitations.FirstOrDefault(invitation => invitation.Id == viaInvitationId);
+        if (viaInvitation == null)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.NotFound, "Invitation not found.")
+            });
+        }
+
+        var result= viaInvitation.Accept();
+        return result;
+    }
+
+    public OperationResult DeclineInvitation(ViaInvitationId viaInvitationId)
+    {
+        ViaInvitation? viaInvitation = _invitations.FirstOrDefault(invitation => invitation.Id == viaInvitationId);
+        if (viaInvitation == null)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.NotFound, "Invitation not found.")
+            });
+        }
+
+        var result= viaInvitation.Reject();
+        return result;
+    }
 }
+
