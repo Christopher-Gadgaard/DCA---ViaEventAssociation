@@ -12,16 +12,16 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Event;
 
 public class ViaEvent : AggregateRoot<ViaEventId>
 {
-    private ViaEventTitle? _title;
-    private ViaEventDescription? _description;
-    private ViaDateTimeRange? _dateTimeRange;
+    private const string DefaultTitle = "Working Title";
+    private ViaEventTitle _title;
+    private ViaEventDescription _description;
+    private ViaDateTimeRange _dateTimeRange;
     private ViaMaxGuests _maxGuests;
     private ViaEventStatus _status;
     private ViaEventVisibility _visibility;
     private List<ViaGuestId> _guests;
 
-    private static ITimeProvider _timeProvider;
-    private const string DefaultTitle = "Working Title";
+    private static ITimeProvider? _timeProvider;
 
     internal new ViaEventId Id => base.Id;
     internal ViaEventTitle? Title => _title;
@@ -34,16 +34,17 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private ViaEvent(
         ViaEventId id,
+        ITimeProvider timeProvider,
         ViaEventTitle? title = null,
         ViaEventDescription? description = null,
         ViaDateTimeRange? dateTimeRange = null,
         ViaMaxGuests? maxGuests = null,
         ViaEventStatus status = ViaEventStatus.Draft,
-        ViaEventVisibility visibility = ViaEventVisibility.Private,
-        ITimeProvider? timeProvider = null)
+        ViaEventVisibility visibility = ViaEventVisibility.Private
+    )
         : base(id)
     {
-        _timeProvider = timeProvider ?? new SystemTimeProvider();
+        _timeProvider = timeProvider;
         _title = title ?? ViaEventTitle.Create(DefaultTitle).Payload;
         _description = description ?? ViaEventDescription.Create("").Payload;
         var validStartTime = AdjustStartTimeBasedOnBusinessRules(_timeProvider.Now);
@@ -56,10 +57,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         _guests = new List<ViaGuestId>();
     }
 
-    public static OperationResult<ViaEvent> Create(ViaEventId id)
+    public static OperationResult<ViaEvent> Create(ViaEventId id, ITimeProvider timeProvider)
     {
-        _timeProvider = new SystemTimeProvider();
-        return new ViaEvent(id);
+        return new ViaEvent(id, timeProvider);
     }
 
     public OperationResult UpdateTitle(ViaEventTitle newTitle)
@@ -238,7 +238,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled
             ? OperationResult.Failure(new List<OperationError>
-                { new(ErrorCode.BadRequest, "The event cannot be modified in its current state.") })
+                {new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")})
             : OperationResult.Success();
     }
 
@@ -274,25 +274,25 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         if (_status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.") });
+                {new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.")});
         }
 
         if (_visibility != ViaEventVisibility.Public)
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.") });
+                {new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.")});
         }
 
         if (IsFull())
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.Conflict, "The event is full.") });
+                {new OperationError(ErrorCode.Conflict, "The event is full.")});
         }
 
         if (IsParticipant(guestId))
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.BadRequest, "The guest is already a participant.") });
+                {new OperationError(ErrorCode.BadRequest, "The guest is already a participant.")});
         }
 
         _guests.Add(guestId);
@@ -309,7 +309,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_dateTimeRange.StartValue <= DateTime.Now )
+        if (_dateTimeRange.StartValue <= DateTime.Now)
         {
             return OperationResult.Failure(new List<OperationError>
             {
