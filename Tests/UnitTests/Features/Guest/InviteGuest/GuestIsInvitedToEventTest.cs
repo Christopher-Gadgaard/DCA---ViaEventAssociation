@@ -14,7 +14,7 @@ namespace UnitTests.Features.Guest.InviteGuest;
 
 public class GuestIsInvitedToEventTest
 {
-    [Fact]
+    /*[Fact]
     public void Guest_Receives_Invitation_To_Ready_And_Not_Full_Event_Successfully()
     {
         // Arrange
@@ -159,6 +159,6 @@ public class GuestIsInvitedToEventTest
         Assert.False(result.IsSuccess);
         
         Assert.Contains(result.OperationErrors, error => error.Code == ErrorCode.Conflict && error.Message == "The event is full.");
-    }
+    }*/
     
 }

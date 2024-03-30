@@ -1,6 +1,7 @@
 ﻿using UnitTests.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace UnitTests.Features.Event.CreateEvent;
@@ -17,8 +18,8 @@ public abstract class ViaEventCreationTests
                 Assert.True(eventId.IsSuccess);
         
                 // Act
-                
-                var result = ViaEvent.Create(eventId.Payload);
+                var time = new SystemTimeProvider();
+                var result = ViaEvent.Create(eventId.Payload,time);
         
                 // Assert
                 Assert.True(result.IsSuccess);
