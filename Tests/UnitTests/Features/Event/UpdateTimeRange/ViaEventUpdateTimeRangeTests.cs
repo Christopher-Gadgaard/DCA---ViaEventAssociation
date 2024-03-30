@@ -1,5 +1,6 @@
 ﻿using UnitTests.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
@@ -94,6 +95,7 @@ public class ViaEventUpdateTimeRangeTests
         public void UpdateTimeRange_Success_WhenStartTimeIsInFuture(DateTime start, DateTime end)
         {
             // Arrange
+            var systemTimeProvider = new SystemTimeProvider();
             var viaEventId = ViaEventId.Create();
             var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
                 .Build(); // Assuming default status is Draft which is modifiable
@@ -102,7 +104,7 @@ public class ViaEventUpdateTimeRangeTests
             Assert.True(start > DateTime.UtcNow, "Start time must be in the future for this test case.");
 
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
             Assert.True(dateTimeRangeResult.IsSuccess, "DateTimeRange creation should be successful.");
             var updateResult = viaEvent.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
 
@@ -121,12 +123,13 @@ public class ViaEventUpdateTimeRangeTests
         public void UpdateTimeRange_Success_WhenDurationIsTenHoursOrLess(DateTime start, DateTime end)
         {
             // Arrange
+            var systemTimeProvider = new SystemTimeProvider();
             var viaEventId = ViaEventId.Create();
             var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
                 .Build();
 
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end, systemTimeProvider);
             Assert.True(dateTimeRangeResult.IsSuccess,
                 "DateTimeRange creation should be successful for durations of 10 hours or less.");
             var updateResult = viaEvent.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
@@ -144,8 +147,9 @@ public class ViaEventUpdateTimeRangeTests
         [MemberData(nameof(DateTimeRangesWithStartDateAfterEndDate), MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenStartDateIsAfterEndDate(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.False(dateTimeRangeResult.IsSuccess,
@@ -164,8 +168,9 @@ public class ViaEventUpdateTimeRangeTests
             MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenStartTimeIsAfterEndTimeSameDay(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.False(dateTimeRangeResult.IsSuccess,
@@ -184,8 +189,9 @@ public class ViaEventUpdateTimeRangeTests
             MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenEventDurationIsLessThanOneHour(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.False(dateTimeRangeResult.IsSuccess,
@@ -203,8 +209,9 @@ public class ViaEventUpdateTimeRangeTests
             MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenDurationIsLessThanOneHourAroundMidnight(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.False(dateTimeRangeResult.IsSuccess,
@@ -221,8 +228,9 @@ public class ViaEventUpdateTimeRangeTests
         [MemberData(nameof(DateTimeRangesWithStartTimeBefore8Am), MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenStartTimeIsBefore8AM(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.False(dateTimeRangeResult.IsSuccess,
@@ -240,8 +248,9 @@ public class ViaEventUpdateTimeRangeTests
             MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenEventSpansIntoRestrictedEarlyMorningHours(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.True(dateTimeRangeResult.IsFailure,
@@ -259,6 +268,7 @@ public class ViaEventUpdateTimeRangeTests
         public void UpdateTimeRange_Failure_WhenEventIsActive()
         {
             // Arrange
+            var systemTimeProvider = new SystemTimeProvider();
             var viaEventId = ViaEventId.Create();
             var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
                 .WithStatus(ViaEventStatus.Active) // Set the event to Active status
@@ -269,7 +279,7 @@ public class ViaEventUpdateTimeRangeTests
             var newEndTime = new DateTime(2050, 01, 01, 14, 00, 00);
 
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(newStartTime, newEndTime);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(newStartTime, newEndTime,systemTimeProvider);
             Assert.True(dateTimeRangeResult.IsSuccess, "DateTimeRange creation should succeed for valid times.");
             var updateResult = viaEvent.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
 
@@ -288,6 +298,7 @@ public class ViaEventUpdateTimeRangeTests
         public void UpdateTimeRange_Failure_WhenEventIsCancelled()
         {
             // Arrange
+            var systemTimeProvider = new SystemTimeProvider();
             var viaEventId = ViaEventId.Create();
             var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
                 .WithStatus(ViaEventStatus.Cancelled) // Set the event to Cancelled status
@@ -298,7 +309,7 @@ public class ViaEventUpdateTimeRangeTests
             var newEndTime = new DateTime(2050, 01, 01, 14, 00, 00);
 
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(newStartTime, newEndTime);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(newStartTime, newEndTime,systemTimeProvider);
             Assert.True(dateTimeRangeResult.IsSuccess, "DateTimeRange creation should succeed for valid times.");
             var updateResult = viaEvent.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
 
@@ -317,8 +328,9 @@ public class ViaEventUpdateTimeRangeTests
         [MemberData(nameof(DateTimeRangesExceedingMaximumDuration), MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenDurationExceedsMaximumAllowed(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.False(dateTimeRangeResult.IsSuccess,
@@ -337,8 +349,9 @@ public class ViaEventUpdateTimeRangeTests
         [MemberData(nameof(DateTimeRangesWithStartTimeInPast), MemberType = typeof(ViaEventUpdateTimeRangeTests))]
         public void UpdateTimeRange_Failure_WhenStartTimeIsInPast(DateTime start, DateTime end)
         {
+            var systemTimeProvider = new SystemTimeProvider();
             // Act
-            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
             // Assert
             Assert.False(dateTimeRangeResult.IsSuccess,

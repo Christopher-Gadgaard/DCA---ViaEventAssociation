@@ -1,5 +1,6 @@
 ﻿using UnitTests.Common.Factories;
 using UnitTests.Common.Utilities;
+using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
@@ -93,10 +94,11 @@ public class ViaDateTimeRangeTests
     public void Create_StartAfterEndDateTime_ReturnsFailure()
     {
         // Arrange
+        var systemTimeProvider = new SystemTimeProvider();
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateInvalidDateRange_StartAfterEnd();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var result = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -107,10 +109,11 @@ public class ViaDateTimeRangeTests
     public void Create_InvalidStartTime_ReturnsFailure()
     {
         // Arrange
+        var systemTimeProvider = new SystemTimeProvider();
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateInvalidDateRange_InvalidStartTime();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var result = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -123,10 +126,11 @@ public class ViaDateTimeRangeTests
     public void Create_EventInvalidDuration_ReturnsFailure()
     {
         // Arrange
+        var systemTimeProvider = new SystemTimeProvider();
         var (start, end) = ViaDateTimeRangeTestDataFactory.CreateInvalidDateRange_InvalidDuration();
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var result = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -142,12 +146,13 @@ public class ViaDateTimeRangeTests
         var (start, end) =
             ViaDateTimeRangeTestDataFactory
                 .CreateInvalidDateRange_InvalidStartTime(); // This example uses start time before 8 AM as the base scenario
-
+        var systemTimeProvider = new SystemTimeProvider();
+        
         // Modify 'end' to also violate the duration rule, making the test check for two failures.
         end = start.AddHours(11); // Extend to more than 10 hours to violate another rule
 
         // Act
-        var result = ViaDateTimeRange.Create(start, end);
+        var result = ViaDateTimeRange.Create(start, end,systemTimeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);

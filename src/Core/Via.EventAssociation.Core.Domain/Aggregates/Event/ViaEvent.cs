@@ -49,7 +49,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         _description = description ?? ViaEventDescription.Create("").Payload;
         var validStartTime = AdjustStartTimeBasedOnBusinessRules(_timeProvider.Now);
         _dateTimeRange = dateTimeRange ?? ViaDateTimeRange
-            .Create(validStartTime, validStartTime.AddHours(1))
+            .Create(validStartTime, validStartTime.AddHours(1), _timeProvider)
             .Payload;
         _maxGuests = maxGuests ?? ViaMaxGuests.Create(5).Payload;
         _status = status;

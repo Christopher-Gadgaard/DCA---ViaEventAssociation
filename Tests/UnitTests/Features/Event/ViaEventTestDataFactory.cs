@@ -1,4 +1,5 @@
-﻿using Via.EventAssociation.Core.Domain.Aggregates.Event;
+﻿using UnitTests.Common.Utilities;
+using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Common.Utilities;
@@ -62,7 +63,8 @@ public class ViaEventTestDataFactory
 
     public ViaEventTestDataFactory WithDateTimeRange(DateTime start, DateTime end)
     {
-        var dateTimeRangeResult = ViaDateTimeRange.Create(start, end);
+        var fakeTimeProvider = new FakeTimeProvider(start.AddDays(-1));
+        var dateTimeRangeResult = ViaDateTimeRange.Create(start, end, fakeTimeProvider);
         if (dateTimeRangeResult.IsSuccess)
         {
             _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
