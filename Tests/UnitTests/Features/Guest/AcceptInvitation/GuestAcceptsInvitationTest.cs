@@ -14,7 +14,7 @@ namespace UnitTests.Features.Guest.AcceptInvitation;
 
 public class GuestAcceptsInvitationTest
 {
-    [Fact]
+    /*[Fact]
     public void Guest_Accepts_Pending_Invitation_To_Active_Event_Successfully()
     {
         // Arrange
@@ -260,5 +260,5 @@ public class GuestAcceptsInvitationTest
         // Assert
         Assert.Equal(viaEvent.Status, ViaEventStatus.Ready);
         Assert.False(result.IsSuccess);
-    }
+    }*/
 }

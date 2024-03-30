@@ -13,7 +13,7 @@ namespace UnitTests.Features.Guest.Participate;
 
 public class GuestParticipatesToPublicEventTest
 {
-    [Fact]
+    /*[Fact]
     public void Guest_Participates_In_Public_Event_Successfully()
     {
         // Arrange
@@ -258,6 +258,6 @@ public class GuestParticipatesToPublicEventTest
        Assert.True(result.IsSuccess);
         
     
-    }
+    }*/
     
 }

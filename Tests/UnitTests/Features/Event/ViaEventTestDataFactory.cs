@@ -1,6 +1,7 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
+using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
@@ -8,32 +9,32 @@ namespace UnitTests.Features.Event;
 
 public class ViaEventTestDataFactory
 {
-    
-   private ViaEvent _event;
-
-    private ViaEventTestDataFactory(ViaEventId id)
-    {
-        
-        _event = ViaEvent.Create(id).Payload; 
-    }
+    private ViaEvent _event;
 
     public static ViaEventTestDataFactory Init(ViaEventId id)
     {
         return new ViaEventTestDataFactory(id);
     }
 
+    private ViaEventTestDataFactory(ViaEventId id)
+    {
+        var systemTime = new SystemTimeProvider();
+        _event = ViaEvent.Create(id,systemTime).Payload;
+    }
+
+
     public ViaEventTestDataFactory WithStatus(ViaEventStatus status)
     {
-       
-        if (status == ViaEventStatus.Active )
+        if (status == ViaEventStatus.Active)
         {
-            _event.UpdateStatus(ViaEventStatus.Ready); 
+            _event.UpdateStatus(ViaEventStatus.Ready);
             _event.UpdateStatus(status);
         }
         else
         {
             _event.UpdateStatus(status);
         }
+
         return this;
     }
 
@@ -44,6 +45,7 @@ public class ViaEventTestDataFactory
         {
             _event.UpdateTitle(titleResult.Payload!);
         }
+
         return this;
     }
 
@@ -54,6 +56,7 @@ public class ViaEventTestDataFactory
         {
             _event.UpdateDescription(descriptionResult.Payload!);
         }
+
         return this;
     }
 
@@ -64,9 +67,10 @@ public class ViaEventTestDataFactory
         {
             _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
         }
+
         return this;
     }
-    
+
     public ViaEventTestDataFactory WithDateTimeRange(ViaDateTimeRange dateTimeRange)
     {
         _event.UpdateDateTimeRange(dateTimeRange);
@@ -78,11 +82,12 @@ public class ViaEventTestDataFactory
         var maxGuestsResult = ViaMaxGuests.Create(maxGuests);
         if (maxGuestsResult.IsSuccess)
         {
-           _event.SetMaxGuests(maxGuestsResult.Payload!);
+            _event.SetMaxGuests(maxGuestsResult.Payload!);
         }
+
         return this;
     }
-    
+
     public ViaEventTestDataFactory WithVisibility(ViaEventVisibility visibility)
     {
         if (visibility == ViaEventVisibility.Public)
@@ -93,11 +98,12 @@ public class ViaEventTestDataFactory
         {
             _event.MakePrivate();
         }
+
         return this;
     }
 
     public ViaEvent Build()
     {
         return _event;
-    }  
+    }
 }

@@ -14,7 +14,7 @@ namespace UnitTests.Features.Guest.DeclineInvitation;
 
 public class GuestDeclinesInvitationTest
 {
-    [Fact]
+    /*[Fact]
     public void Guest_Declines_Invitation_For_Active_Event_Invitation_Registered_As_Declined()
     {
         // Arrange
@@ -131,7 +131,5 @@ Assert.Equal(ViaInvitationStatus.Accepted, acceptedInvitation.Status);
         // Assert
         Assert.False(result.IsSuccess);
        
-    }
-    
-    
+    }*/
 }

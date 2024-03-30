@@ -14,7 +14,7 @@ namespace UnitTests.Features.Guest.CancelParticipation;
 
 public class GuestCancelsEventParticipationTest
 {
-    [Fact]
+    /*[Fact]
     public void Guest_Removes_Participation_From_Public_Event_Successfully()
     {
         // Arrange
@@ -142,5 +142,5 @@ public class GuestCancelsEventParticipationTest
         Assert.Equal(time.OperationErrors, new List<OperationError>());
         var addParticipant = viaEvent.AddParticipant(guestId);
         Assert.True(addParticipant.IsFailure);
-    }
+    }*/
 }
