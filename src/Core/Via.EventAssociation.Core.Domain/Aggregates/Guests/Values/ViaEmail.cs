@@ -4,7 +4,7 @@ using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace Via.EventAssociation.Core.Domain.Aggregates.Guests;
+namespace Via.EventAssociation.Core.Domain.Aggregates.Guests.Values;
 
 public class ViaEmail:ValueObject
 {

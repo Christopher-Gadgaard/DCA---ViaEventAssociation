@@ -1,8 +1,7 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Bases;
-using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace Via.EventAssociation.Core.Domain.Aggregates.Guests;
+namespace Via.EventAssociation.Core.Domain.Aggregates.Guests.Values;
 
 public class ViaGuestName : ValueObject
 {

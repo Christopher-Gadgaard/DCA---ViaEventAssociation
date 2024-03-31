@@ -1,6 +1,5 @@
 ﻿using Via.EventAssociation.Core.Domain.Common.Bases;
-using Via.EventAssociation.Core.Domain.Common.Utilities;
-using Via.EventAssociation.Core.Domain.Common.Utilities.Interfaces;
+using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 

@@ -1,4 +1,5 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event;
+using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
 using Via.EventAssociation.Core.Domain.Aggregates.Guests;
 using Via.EventAssociation.Core.Domain.Common.UnitOfWork;
 using Via.EventAssociation.Core.Domain.Contracts;

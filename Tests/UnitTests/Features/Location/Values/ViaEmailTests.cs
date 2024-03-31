@@ -2,6 +2,7 @@
 using Xunit;
 using System.Linq;
 using Via.EventAssociation.Core.Domain.Aggregates.Guests;
+using Via.EventAssociation.Core.Domain.Aggregates.Guests.Values;
 using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult;
 

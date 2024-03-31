@@ -2,9 +2,10 @@
 using UnitTests.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
+using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
-namespace UnitTests.Features.Event.Values;
+namespace UnitTests.Common.Values;
 
 public class ViaDateTimeRangeTests
 {
