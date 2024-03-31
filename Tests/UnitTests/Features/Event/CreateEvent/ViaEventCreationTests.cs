@@ -1,8 +1,8 @@
-﻿using UnitTests.Common.Utilities;
-using Via.EventAssociation.Core.Domain.Aggregates.Event;
+﻿using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
+using Via.EventAssociation.Core.Domain.Contracts;
 
 namespace UnitTests.Features.Event.CreateEvent;
 

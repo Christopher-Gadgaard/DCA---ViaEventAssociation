@@ -1,10 +1,11 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
+using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationRequestEntity;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Common.Bases;
-using Via.EventAssociation.Core.Domain.Common.Utilities;
-using Via.EventAssociation.Core.Domain.Common.Utilities.Interfaces;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
+using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
@@ -22,7 +23,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     private List<ViaGuestId> _guests;
     private List<ViaInvitation> _invitations;
     private List<ViaInvitationRequest> _invitationRequests;
-    private static ITimeProvider? _timeProvider;
+    private static ITimeProvider _timeProvider;
+
+    private bool IsFull => _guests.Count >= _maxGuests.Value;
 
     internal new ViaEventId Id => base.Id;
     internal ViaEventTitle? Title => _title;
@@ -239,7 +242,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     {
         return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled
             ? OperationResult.Failure(new List<OperationError>
-                { new(ErrorCode.BadRequest, "The event cannot be modified in its current state.") })
+                {new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")})
             : OperationResult.Success();
     }
 
@@ -275,25 +278,25 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         if (_status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.") });
+                {new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.")});
         }
 
         if (_visibility != ViaEventVisibility.Public)
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.") });
+                {new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.")});
         }
 
-        if (IsFull())
+        if (IsFull)
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.Conflict, "The event is full.") });
+                {new OperationError(ErrorCode.Conflict, "The event is full.")});
         }
 
         if (IsParticipant(guestId))
         {
             return OperationResult.Failure(new List<OperationError>
-                { new OperationError(ErrorCode.BadRequest, "The guest is already a participant.") });
+                {new OperationError(ErrorCode.BadRequest, "The guest is already a participant.")});
         }
 
         _guests.Add(guestId);
@@ -323,12 +326,6 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult.Success();
     }
 
-
-    public bool IsFull()
-    {
-        return _guests.Count >= _maxGuests.Value;
-    }
-
     public bool IsParticipant(ViaGuestId guestId)
     {
         return _guests.Contains(guestId);
@@ -336,7 +333,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult SendInvitation(ViaInvitation viaInvitation)
     {
-        if (IsFull())
+        if (IsFull)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -366,7 +363,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult AcceptInvitation(ViaInvitationId viaInvitationId)
     {
-        if (IsFull())
+        if (IsFull)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -399,7 +396,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        var result= viaInvitation.Accept();
+        var result = viaInvitation.Accept();
         return result;
     }
 
@@ -414,8 +411,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        var result= viaInvitation.Reject();
+        var result = viaInvitation.Reject();
         return result;
     }
 }
-

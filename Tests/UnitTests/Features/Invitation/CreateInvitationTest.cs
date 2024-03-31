@@ -1,5 +1,6 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace UnitTests.Features.Invitation;

@@ -1,4 +1,4 @@
-﻿using Via.EventAssociation.Core.Domain.Common.Utilities.Interfaces;
+﻿using Via.EventAssociation.Core.Domain.Contracts;
 
 namespace UnitTests.Common.Utilities;
 

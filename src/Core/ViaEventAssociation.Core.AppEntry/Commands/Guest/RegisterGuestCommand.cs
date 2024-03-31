@@ -1,4 +1,5 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Guests;
+using Via.EventAssociation.Core.Domain.Aggregates.Guests.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
