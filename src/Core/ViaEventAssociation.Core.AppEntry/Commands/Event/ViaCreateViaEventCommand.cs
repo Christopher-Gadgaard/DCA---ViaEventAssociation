@@ -7,8 +7,9 @@ namespace ViaEventAssociation.Core.AppEntry.Commands.Event;
 
 public class ViaCreateViaEventCommand
 {
-    internal ITimeProvider TimeProvider;
-    
+    internal readonly ITimeProvider TimeProvider;
+    private ViaCreateViaEventCommand(ITimeProvider timeProvider) => TimeProvider = timeProvider;
+
     public static OperationResult<ViaCreateViaEventCommand> Create(ITimeProvider timeProvider)
     {
         var eventId = ViaEventId.Create();
@@ -17,16 +18,14 @@ public class ViaCreateViaEventCommand
         {
             return eventId.OperationErrors;
         }
-        
+
         var viaEvent = ViaEvent.Create(eventId.Payload, timeProvider);
-        
+
         if (viaEvent.IsFailure)
         {
             return viaEvent.OperationErrors;
         }
-        
+
         return new ViaCreateViaEventCommand(timeProvider);
     }
-    
-    private ViaCreateViaEventCommand(ITimeProvider timeProvider) => TimeProvider = timeProvider;
 }
