@@ -36,9 +36,9 @@
     * [ ] Command
     * [ ] Handler
 
-* [ ] UC10
-    * [ ] Command
-    * [ ] Handler
+* [X] UC10
+    * [X] Command
+    * [X] Handler
 
 * [ ] UC11
     * [ ] Command

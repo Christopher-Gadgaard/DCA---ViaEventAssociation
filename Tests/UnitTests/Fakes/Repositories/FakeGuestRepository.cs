@@ -6,7 +6,7 @@ namespace UnitTests.Fakes.Repositories;
 
 public class FakeGuestRepository:IViaGuestRepository
 {
-    public Task<ViaGuest?> GetByIdAsync(ViaGuestId id)
+    public Task<ViaGuest> GetByIdAsync(ViaGuestId id)
     {
         var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
         return Task.FromResult(viaGuest);
@@ -29,6 +29,8 @@ public class FakeGuestRepository:IViaGuestRepository
 
     public Task<ViaGuest> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
+        return Task.FromResult(viaGuest);
     }
+    
 }

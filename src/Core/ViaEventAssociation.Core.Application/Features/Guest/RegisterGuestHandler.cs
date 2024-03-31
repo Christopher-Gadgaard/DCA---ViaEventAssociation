@@ -2,6 +2,7 @@
 using Via.EventAssociation.Core.Domain.Common.UnitOfWork;
 using ViaEventAssociation.Core.AppEntry.Commands;
 using ViaEventAssociation.Core.AppEntry.Commands.Guest;
+using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Application.Features.Guest;
@@ -19,7 +20,8 @@ internal class RegisterGuestHandler: ICommandHandler<RegisterGuestCommand>
     
     public async Task<OperationResult> Handle(RegisterGuestCommand command)
     {
-            await _guestRepository.AddAsync(command.Guest);
+           await _guestRepository.AddAsync(command.Guest);
+          
             await _unitOfWork.SaveChangesAsync();
             return OperationResult.Success();
     }
