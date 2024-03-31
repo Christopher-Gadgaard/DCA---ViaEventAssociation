@@ -24,6 +24,8 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Core\Tools\ViaEventAssociation.Core.Tools.OperationResult\ViaEventAssociation.Core.Tools.OperationResult.csproj" />
       <ProjectReference Include="..\..\src\Core\Via.EventAssociation.Core.Domain\Via.EventAssociation.Core.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Core\ViaEventAssociation.Core.AppEntry\ViaEventAssociation.Core.AppEntry.csproj" />
+      <ProjectReference Include="..\..\src\Core\ViaEventAssociation.Core.Application\ViaEventAssociation.Core.Application.csproj" />
     </ItemGroup>
 
 </Project>

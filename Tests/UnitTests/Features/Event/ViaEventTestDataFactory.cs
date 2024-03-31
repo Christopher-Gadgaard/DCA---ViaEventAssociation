@@ -28,6 +28,7 @@ public class ViaEventTestDataFactory
     {
         if (status == ViaEventStatus.Active)
         {
+            WithTitle("test title");
             _event.UpdateStatus(ViaEventStatus.Ready);
             _event.UpdateStatus(status);
         }
@@ -99,6 +100,16 @@ public class ViaEventTestDataFactory
         else
         {
             _event.MakePrivate();
+        }
+
+        return this;
+    }
+    public ViaEventTestDataFactory WithGuests(List<ViaGuestId> guestIds)
+    {
+        foreach (var guestId in guestIds)
+        {
+            
+           var result= _event.AddParticipant(guestId);
         }
 
         return this;
