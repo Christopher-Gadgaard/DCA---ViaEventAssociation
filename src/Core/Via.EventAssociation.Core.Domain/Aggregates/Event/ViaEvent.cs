@@ -5,37 +5,28 @@ using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Common.Bases;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
-using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Event;
 
 public class ViaEvent : AggregateRoot<ViaEventId>
-{
-    private ViaEventTitle _title;
-    private ViaEventDescription _description;
-    private ViaDateTimeRange? _dateTimeRange;
-    private ViaMaxGuests _maxGuests;
-    private ViaEventStatus _status;
-    private ViaEventVisibility _visibility;
+{ 
+    internal new ViaEventId Id => base.Id;
+    internal ViaEventTitle Title { get; private set; }
+    internal ViaEventDescription Description { get; private set; }
+    internal ViaDateTimeRange? DateTimeRange { get; private set; }
+    internal ViaMaxGuests MaxGuests { get; private set; }
+    internal ViaEventStatus Status { get; private set; }
+    internal ViaEventVisibility Visibility { get; private set; }
+    internal IEnumerable<ViaGuestId> Guests => _guests;
+
     private List<ViaGuestId> _guests;
     private List<ViaInvitation> _invitations;
     private List<ViaInvitationRequest> _invitationRequests;
-
-    private bool IsFull => _guests.Count >= _maxGuests.Value;
-
-
-    //Internal for testing
-    internal new ViaEventId Id => base.Id;
-    internal ViaEventTitle Title => _title;
-    internal ViaEventDescription Description => _description;
-    internal ViaDateTimeRange? DateTimeRange => _dateTimeRange;
-    internal ViaMaxGuests MaxGuests => _maxGuests;
-    internal ViaEventStatus Status => _status;
-    internal ViaEventVisibility Visibility => _visibility;
-    internal IEnumerable<ViaGuestId> Guests => _guests;
-
+    
+    private bool IsFull => _guests.Count >= MaxGuests.Value;
+    
     private ViaEvent(
         ViaEventId id,
         ViaEventTitle title,
@@ -46,11 +37,11 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     )
         : base(id)
     {
-        _title = title;
-        _description = description;
-        _maxGuests = maxGuests;
-        _status = status;
-        _visibility = visibility;
+        Title = title;
+        Description = description;
+        MaxGuests = maxGuests;
+        Status = status;
+        Visibility = visibility;
         _guests = new List<ViaGuestId>();
         _invitations = new List<ViaInvitation>();
         _invitationRequests = new List<ViaInvitationRequest>();
@@ -74,7 +65,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             return modifiableStateCheck;
         }
 
-        _title = newTitle;
+        Title = newTitle;
 
         return IfReadyRevertToDraft();
     }
@@ -87,7 +78,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             return modifiableStateCheck;
         }
 
-        _description = newDescription;
+        Description = newDescription;
 
         return IfReadyRevertToDraft();
     }
@@ -100,7 +91,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             return modifiableStateCheck;
         }
 
-        _dateTimeRange = newDateTimeRange;
+        DateTimeRange = newDateTimeRange;
 
         return IfReadyRevertToDraft();
     }
@@ -112,7 +103,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             return TryCancelEvent();
         }
 
-        switch (_status, newStatus)
+        switch (Status, newStatus)
         {
             case (ViaEventStatus.Draft, ViaEventStatus.Ready):
                 return TryReadyEvent();
@@ -131,14 +122,14 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                 return OperationResult.Failure(new List<OperationError>
                 {
                     new(ErrorCode.BadRequest,
-                        $"Transitioning from '{_status}' to '{newStatus}' status is not supported.")
+                        $"Transitioning from '{Status}' to '{newStatus}' status is not supported.")
                 });
         }
     }
 
     public OperationResult MakePublic()
     {
-        if (_status == ViaEventStatus.Cancelled)
+        if (Status == ViaEventStatus.Cancelled)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -146,13 +137,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        _visibility = ViaEventVisibility.Public;
+        Visibility = ViaEventVisibility.Public;
         return OperationResult.Success();
     }
 
     public OperationResult MakePrivate()
     {
-        if (_status is ViaEventStatus.Cancelled or ViaEventStatus.Active)
+        if (Status is ViaEventStatus.Cancelled or ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -160,7 +151,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        _visibility = ViaEventVisibility.Private;
+        Visibility = ViaEventVisibility.Private;
         return OperationResult.Success();
     }
 
@@ -176,7 +167,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult SetMaxGuests(ViaMaxGuests maxGuests)
     {
-        if (_status is ViaEventStatus.Cancelled)
+        if (Status is ViaEventStatus.Cancelled)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -184,7 +175,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_status is ViaEventStatus.Active && maxGuests.Value < _maxGuests.Value)
+        if (Status is ViaEventStatus.Active && maxGuests.Value < MaxGuests.Value)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -192,14 +183,14 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        _maxGuests = maxGuests;
+        MaxGuests = maxGuests;
 
         return OperationResult.Success();
     }
 
     private OperationResult TryReadyEvent()
     {
-        if (_status == ViaEventStatus.Cancelled)
+        if (Status == ViaEventStatus.Cancelled)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -214,7 +205,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                     new OperationError(ErrorCode.BadRequest, message))));
         }
 
-        _status = ViaEventStatus.Ready;
+        Status = ViaEventStatus.Ready;
         return OperationResult.Success();
     }
 
@@ -227,32 +218,32 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             return readyResult;
         }
 
-        _status = ViaEventStatus.Active;
+        Status = ViaEventStatus.Active;
         return OperationResult.Success();
     }
 
     private OperationResult TryCancelEvent()
     {
-        _status = ViaEventStatus.Cancelled;
+        Status = ViaEventStatus.Cancelled;
         return OperationResult.Success();
     }
 
     private bool IsEventDataComplete(out List<string> errorMessages)
     {
         errorMessages = new List<string>();
-        if (_title.Value == ViaEventTitle.Default().Value)
+        if (Title.Value == ViaEventTitle.Default().Value)
             errorMessages.Add("The title must be changed from the default.");
 
-        if (_description is null)
+        if (Description is null)
             errorMessages.Add("The description must be set.");
         
-        if (_dateTimeRange is null)
+        if (DateTimeRange is null)
             errorMessages.Add("The date time range must be set.");
         
-        if (_dateTimeRange is not null && _dateTimeRange.IsPast)
+        if (DateTimeRange is not null && DateTimeRange.IsPast)
             errorMessages.Add("The start time cannot be in the past.");
         
-        if (_maxGuests is null)
+        if (MaxGuests is null)
             errorMessages.Add("The max guests must be set.");
 
         return errorMessages.Count == 0;
@@ -260,7 +251,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private OperationResult CheckModifiableState()
     {
-        return _status is ViaEventStatus.Active or ViaEventStatus.Cancelled
+        return Status is ViaEventStatus.Active or ViaEventStatus.Cancelled
             ? OperationResult.Failure(new List<OperationError>
                 {new(ErrorCode.BadRequest, "The event cannot be modified in its current state.")})
             : OperationResult.Success();
@@ -268,9 +259,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private OperationResult IfReadyRevertToDraft()
     {
-        if (_status == ViaEventStatus.Ready)
+        if (Status == ViaEventStatus.Ready)
         {
-            _status = ViaEventStatus.Draft;
+            Status = ViaEventStatus.Draft;
         }
 
         return OperationResult.Success();
@@ -295,7 +286,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult AddParticipant(ViaGuestId guestId)
     {
-        if (_dateTimeRange.IsPast)
+        if (DateTimeRange.IsPast)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -303,13 +294,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_status != ViaEventStatus.Active)
+        if (Status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
                 {new OperationError(ErrorCode.BadRequest, "Participants can only be added to active events.")});
         }
 
-        if (_visibility != ViaEventVisibility.Public)
+        if (Visibility != ViaEventVisibility.Public)
         {
             return OperationResult.Failure(new List<OperationError>
                 {new OperationError(ErrorCode.BadRequest, "Participants can only be added to public events.")});
@@ -341,7 +332,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_dateTimeRange.StartValue <= DateTime.Now)
+        if (DateTimeRange.StartValue <= DateTime.Now)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -369,7 +360,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_status != ViaEventStatus.Active)
+        if (Status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -377,7 +368,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_visibility != ViaEventVisibility.Private)
+        if (Visibility != ViaEventVisibility.Private)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -399,7 +390,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_status != ViaEventStatus.Active)
+        if (Status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -407,7 +398,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_visibility != ViaEventVisibility.Private)
+        if (Visibility != ViaEventVisibility.Private)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -430,7 +421,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult DeclineInvitation(ViaInvitationId viaInvitationId)
     {
-        ViaInvitation? viaInvitation = _invitations.FirstOrDefault(invitation => invitation.Id == viaInvitationId);
+        var viaInvitation = _invitations.FirstOrDefault(invitation => invitation.Id == viaInvitationId);
         if (viaInvitation == null)
         {
             return OperationResult.Failure(new List<OperationError>

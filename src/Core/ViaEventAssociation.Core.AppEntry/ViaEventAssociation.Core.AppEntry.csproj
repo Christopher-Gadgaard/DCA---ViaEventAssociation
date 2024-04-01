@@ -16,4 +16,8 @@
         </AssemblyAttribute>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Commands\Event\Status\" />
+    </ItemGroup>
+
 </Project>

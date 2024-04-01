@@ -149,7 +149,7 @@ public class GuestParticipatesToPublicEventTest
     }
 
     [Fact]
-    public void Guest_Participation_Fails_When_Event_Start_Time_Is_In_The_Past()
+    public void Guest_Participation_Fails_When_Event_Start_Time_Is_In_The_Past() //TODO: fix this test
     {
         var startTime = new DateTime(2020, 1, 2, 10, 0, 0);
         var endTime = new DateTime(2020, 1, 2, 16, 0, 0);

@@ -6,7 +6,7 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
 namespace UnitTests.Features.Event.Ready;
 
-public abstract class ViaEventReadyEventTests
+public abstract class ViaEventReadyTests
 {
     public class S1
     {

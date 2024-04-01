@@ -6,18 +6,18 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-public class ViaEventSetMaxGuestHandler : ICommandHandler<ViaEventSetMaxGuestCommand>
+public class ViaEventSetMaxGuestsHandler : ICommandHandler<ViaEventSetMaxGuestsCommand>
 {
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    private ViaEventSetMaxGuestHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
+    internal ViaEventSetMaxGuestsHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
-    public async Task<OperationResult> Handle(ViaEventSetMaxGuestCommand command)
+    public async Task<OperationResult> Handle(ViaEventSetMaxGuestsCommand command)
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
-        var result = viaEvent.SetMaxGuests(command.MaxGuest);
+        var result = viaEvent.SetMaxGuests(command.MaxGuests);
 
         if (result.IsFailure)
         {

@@ -11,7 +11,7 @@ public class ViaEventMakePrivateHandler : ICommandHandler<ViaEventMakePrivateCom
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    private ViaEventMakePrivateHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
+    internal ViaEventMakePrivateHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
     public async Task<OperationResult> Handle(ViaEventMakePrivateCommand command)

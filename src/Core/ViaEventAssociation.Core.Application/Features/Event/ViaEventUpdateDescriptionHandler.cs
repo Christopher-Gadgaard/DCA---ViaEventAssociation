@@ -11,7 +11,7 @@ public class ViaEventUpdateDescriptionHandler : ICommandHandler<ViaEventUpdateDe
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    private ViaEventUpdateDescriptionHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
+    internal ViaEventUpdateDescriptionHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
     public async Task<OperationResult> Handle(ViaEventUpdateDescriptionCommand command)

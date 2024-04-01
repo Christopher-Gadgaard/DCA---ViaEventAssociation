@@ -4,7 +4,7 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
 namespace UnitTests.Features.Event.Activate;
 
-public abstract class ViaEventActivatesEventTests
+public abstract class ViaEventActivateTests
 {
     public class S1
     {

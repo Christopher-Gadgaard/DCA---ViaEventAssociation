@@ -11,7 +11,7 @@ public class ViaEventReadyHandler : ICommandHandler<ViaEventReadyCommand>
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    private ViaEventReadyHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
+    internal ViaEventReadyHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
     public async Task<OperationResult> Handle(ViaEventReadyCommand command)

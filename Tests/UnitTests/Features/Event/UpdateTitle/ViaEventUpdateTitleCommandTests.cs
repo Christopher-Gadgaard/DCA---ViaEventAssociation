@@ -10,10 +10,12 @@ public class ViaEventUpdateTitleCommandTests
         // Arrange
         var id = Guid.NewGuid().ToString();
         const string title = "Test Title";
+        
+        // Act
         var result = ViaEventUpdateTitleCommand.Create(id, title);
         var command = result.Payload;
         
-        // Act
+        // Assert
         Assert.True(result.IsSuccess);
         
         Assert.NotNull(command.Id);
