@@ -6,22 +6,20 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 
 public class ViaEventTitle : ValueObject
 {
-    public string Value { get; private init; }
+    internal string Value { get; }
 
-    private ViaEventTitle(string value)
-    {
-        Value = value;
-    }
+    private ViaEventTitle(string value) => Value = value;
 
-    public static OperationResult<ViaEventTitle?> Create(string title)
+    public static OperationResult<ViaEventTitle> Create(string title)
     {
         var validation = Validate(title);
-        if (validation.IsSuccess)
+
+        if (validation.IsFailure)
         {
-            return new ViaEventTitle(title);
+            return validation.OperationErrors;
         }
 
-        return validation.OperationErrors;
+        return new ViaEventTitle(title);
     }
 
     private static OperationResult<string> Validate(string title)
@@ -33,6 +31,8 @@ public class ViaEventTitle : ValueObject
 
         return OperationResult<string>.Success(title);
     }
+    
+    internal static ViaEventTitle Default() => new("Working Title");
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

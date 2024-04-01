@@ -99,7 +99,6 @@ public abstract class ViaEventUpdateTitleTests
             // Arrange
             var viaEventId = ViaEventId.Create();
             var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
-                .WithTitle("Initial Title")
                 .WithStatus(ViaEventStatus.Active)
                 .Build();
 

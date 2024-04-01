@@ -1,4 +1,5 @@
-﻿using UnitTests.Common.Utilities;
+﻿using UnitTests.Common.Factories;
+using UnitTests.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
@@ -12,24 +13,44 @@ namespace UnitTests.Features.Event;
 public class ViaEventTestDataFactory
 {
     private ViaEvent _event;
+    private static ITimeProvider _timeProvider;
+
+    public static ViaEventTestDataFactory Init(ViaEventId id, ITimeProvider? timeProvider)
+    {
+       
+        return new ViaEventTestDataFactory(id, timeProvider ?? new SystemTimeProvider());
+    }
 
     public static ViaEventTestDataFactory Init(ViaEventId id)
     {
-        return new ViaEventTestDataFactory(id);
+        return new ViaEventTestDataFactory(id, new SystemTimeProvider());
     }
 
-    private ViaEventTestDataFactory(ViaEventId id)
+    private ViaEventTestDataFactory(ViaEventId id, ITimeProvider timeProvider)
     {
-        var systemTime = new SystemTimeProvider();
-        _event = ViaEvent.Create(id,systemTime).Payload;
+        _timeProvider = timeProvider;
+        _event = ViaEvent.Create(id).Payload;
     }
+   
 
 
     public ViaEventTestDataFactory WithStatus(ViaEventStatus status)
     {
         if (status == ViaEventStatus.Active)
         {
+            if (_event.DateTimeRange is null)
+            {
+                var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
+                var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
+                var dateTimeRangeResult = ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
+                if (dateTimeRangeResult.IsSuccess)
+                {
+                    _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
+                }
+            }
+            
             WithTitle("test title");
+            
             _event.UpdateStatus(ViaEventStatus.Ready);
             _event.UpdateStatus(status);
         }
@@ -65,8 +86,7 @@ public class ViaEventTestDataFactory
 
     public ViaEventTestDataFactory WithDateTimeRange(DateTime start, DateTime end)
     {
-        var fakeTimeProvider = new FakeTimeProvider(start.AddDays(-1));
-        var dateTimeRangeResult = ViaDateTimeRange.Create(start, end, fakeTimeProvider);
+        var dateTimeRangeResult = ViaDateTimeRange.Create(start, end, _timeProvider);
         if (dateTimeRangeResult.IsSuccess)
         {
             _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
@@ -118,6 +138,18 @@ public class ViaEventTestDataFactory
 
     public ViaEvent Build()
     {
+        if (_event.DateTimeRange is not null) return _event;
+        
+        var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
+        var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
+        var dateTimeRangeResult = ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
+        if (dateTimeRangeResult.IsSuccess)
+        {
+            _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
+        }
+
         return _event;
     }
+    
+    
 }

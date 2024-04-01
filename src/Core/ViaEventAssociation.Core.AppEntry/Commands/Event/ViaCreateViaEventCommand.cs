@@ -19,12 +19,7 @@ public class ViaCreateViaEventCommand
             return eventId.OperationErrors;
         }
 
-        var viaEvent = ViaEvent.Create(eventId.Payload, timeProvider);
-
-        if (viaEvent.IsFailure)
-        {
-            return viaEvent.OperationErrors;
-        }
+       
 
         return new ViaCreateViaEventCommand(timeProvider);
     }

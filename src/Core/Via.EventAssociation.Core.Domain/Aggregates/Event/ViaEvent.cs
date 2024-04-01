@@ -13,23 +13,23 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Event;
 
 public class ViaEvent : AggregateRoot<ViaEventId>
 {
-    private const string DefaultTitle = "Working Title";
     private ViaEventTitle _title;
     private ViaEventDescription _description;
-    private ViaDateTimeRange _dateTimeRange;
+    private ViaDateTimeRange? _dateTimeRange;
     private ViaMaxGuests _maxGuests;
     private ViaEventStatus _status;
     private ViaEventVisibility _visibility;
     private List<ViaGuestId> _guests;
     private List<ViaInvitation> _invitations;
     private List<ViaInvitationRequest> _invitationRequests;
-    private static ITimeProvider _timeProvider;
 
     private bool IsFull => _guests.Count >= _maxGuests.Value;
 
+    
+    //Internal for testing
     internal new ViaEventId Id => base.Id;
-    internal ViaEventTitle? Title => _title;
-    internal ViaEventDescription? Description => _description;
+    internal ViaEventTitle Title => _title;
+    internal ViaEventDescription Description => _description;
     internal ViaDateTimeRange? DateTimeRange => _dateTimeRange;
     internal ViaMaxGuests MaxGuests => _maxGuests;
     internal ViaEventStatus Status => _status;
@@ -38,32 +38,32 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private ViaEvent(
         ViaEventId id,
-        ITimeProvider timeProvider,
-        ViaEventTitle? title = null,
-        ViaEventDescription? description = null,
-        ViaDateTimeRange? dateTimeRange = null,
-        ViaMaxGuests? maxGuests = null,
-        ViaEventStatus status = ViaEventStatus.Draft,
-        ViaEventVisibility visibility = ViaEventVisibility.Private
+        ViaEventTitle title,
+        ViaEventDescription description,
+        ViaMaxGuests maxGuests,
+        ViaEventStatus status,
+        ViaEventVisibility visibility
     )
         : base(id)
     {
-        _timeProvider = timeProvider;
-        _title = title ?? ViaEventTitle.Create(DefaultTitle).Payload;
-        _description = description ?? ViaEventDescription.Create("").Payload;
-        var validStartTime = AdjustStartTimeBasedOnBusinessRules(_timeProvider.Now);
-        _dateTimeRange = dateTimeRange ?? ViaDateTimeRange
-            .Create(validStartTime, validStartTime.AddHours(1), _timeProvider)
-            .Payload;
-        _maxGuests = maxGuests ?? ViaMaxGuests.Create(5).Payload;
+        _title = title;
+        _description = description;
+        _maxGuests = maxGuests;
         _status = status;
         _visibility = visibility;
         _guests = new List<ViaGuestId>();
+        _invitations = new List<ViaInvitation>();
+        _invitationRequests = new List<ViaInvitationRequest>();
     }
 
-    public static OperationResult<ViaEvent> Create(ViaEventId id, ITimeProvider timeProvider)
+    public static OperationResult<ViaEvent> Create(ViaEventId id)
     {
-        return new ViaEvent(id, timeProvider);
+        var titleResult = ViaEventTitle.Default();
+        var descriptionResult = ViaEventDescription.Default();
+        var maxGuestsResult = ViaMaxGuests.Default();
+        const ViaEventStatus status = ViaEventStatus.Draft;
+        const ViaEventVisibility visibility = ViaEventVisibility.Private;
+        return new ViaEvent(id, titleResult, descriptionResult, maxGuestsResult, status, visibility);
     }
 
     public OperationResult UpdateTitle(ViaEventTitle newTitle)
@@ -202,7 +202,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private OperationResult TryActivateEvent()
     {
-        if (_timeProvider.Now >= _dateTimeRange!.StartValue.AddSeconds(30))
+        if (_dateTimeRange.IsPast)
         {
             return OperationResult.Failure(new List<OperationError>
             {
@@ -223,13 +223,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     private bool IsEventDataComplete(out List<string> errorMessages)
     {
         errorMessages = new List<string>();
-        if (_title == null || _title.Value == DefaultTitle)
+        if (_title.Value == ViaEventTitle.Default().Value)
             errorMessages.Add("The title must be changed from the default.");
 
-        if (_description == null)
+        if (_description is null)
             errorMessages.Add("The description must be set.");
 
-        if (_dateTimeRange == null || _dateTimeRange.StartValue.AddSeconds(30) < _timeProvider.Now)
+        if (_dateTimeRange is null || _dateTimeRange.IsPast)
             errorMessages.Add("The start time cannot be in the past.");
 
         if (_maxGuests == null)
