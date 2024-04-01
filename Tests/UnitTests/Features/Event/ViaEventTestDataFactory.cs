@@ -2,6 +2,7 @@
 using UnitTests.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
@@ -147,6 +148,15 @@ public class ViaEventTestDataFactory
         return this;
     }
 
+    public ViaEventTestDataFactory WithInvitations(List<ViaInvitation> invitations)
+    {
+        foreach (var invitation in invitations)
+        {
+            var result = _event.SendInvitation(invitation);
+        }
+
+        return this;
+    }
     public ViaEvent Build()
     {
         return _event;

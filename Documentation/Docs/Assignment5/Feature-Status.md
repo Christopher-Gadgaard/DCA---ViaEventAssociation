@@ -44,17 +44,17 @@
     * [X] Command
     * [X] Handler
 
-* [ ] UC12
-    * [ ] Command
-    * [ ] Handler
+* [X] UC12
+    * [X] Command
+    * [X] Handler
 
-* [ ] UC13
-    * [ ] Command
-    * [ ] Handler
+* [X] UC13
+    * [X] Command
+    * [X] Handler
 
-* [ ] UC14
-    * [ ] Command
-    * [ ] Handler
+* [X] UC14
+    * [X] Command
+    * [X] Handler
 
 * [ ] UC15
     * [ ] Command
