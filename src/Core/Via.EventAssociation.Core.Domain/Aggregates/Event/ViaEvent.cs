@@ -25,7 +25,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private bool IsFull => _guests.Count >= _maxGuests.Value;
 
-    
+
     //Internal for testing
     internal new ViaEventId Id => base.Id;
     internal ViaEventTitle Title => _title;
@@ -169,6 +169,11 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return TryReadyEvent();
     }
 
+    public OperationResult Activate()
+    {
+        return TryActivateEvent();
+    }
+
     public OperationResult SetMaxGuests(ViaMaxGuests maxGuests)
     {
         if (_status is ViaEventStatus.Cancelled)
@@ -194,7 +199,15 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private OperationResult TryReadyEvent()
     {
-        if (!IsEventDataComplete(out List<string> errorMessages))
+        if (_status == ViaEventStatus.Cancelled)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "Cancelled events cannot be readied or activated.")
+            });
+        }
+
+        if (!IsEventDataComplete(out var errorMessages))
         {
             return OperationResult.Failure(
                 new List<OperationError>(errorMessages.Select(message =>
@@ -207,12 +220,11 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     private OperationResult TryActivateEvent()
     {
-        if (_dateTimeRange.IsPast)
+        var readyResult = TryReadyEvent();
+        
+        if (readyResult.IsFailure)
         {
-            return OperationResult.Failure(new List<OperationError>
-            {
-                new(ErrorCode.BadRequest, "Cannot activate past events.")
-            });
+            return readyResult;
         }
 
         _status = ViaEventStatus.Active;
@@ -233,10 +245,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
         if (_description is null)
             errorMessages.Add("The description must be set.");
-
-        if (_dateTimeRange is null || _dateTimeRange.IsPast)
+        
+        if (_dateTimeRange is null)
+            errorMessages.Add("The date time range must be set.");
+        
+        if (_dateTimeRange is not null && _dateTimeRange.IsPast)
             errorMessages.Add("The start time cannot be in the past.");
-
+        
         if (_maxGuests is null)
             errorMessages.Add("The max guests must be set.");
 
@@ -287,6 +302,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                 new(ErrorCode.BadRequest, "Cannot add participation too past events.")
             });
         }
+
         if (_status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>

@@ -9,7 +9,7 @@ public abstract class ViaEventActivatesEventTests
     public class S1
     {
         [Fact]
-        public void ActivateEvent_Success_WhenEventIsDraftAndComplete()
+        public void ActivateEventWithUpdateStatus_Success_WhenEventIsDraftAndComplete()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -24,12 +24,29 @@ public abstract class ViaEventActivatesEventTests
             Assert.True(result.IsSuccess);
             Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
         }
+        
+        [Fact]
+        public void ActivateEvent_Success_WhenEventIsDraftAndComplete()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Some Title").WithValidPastDateTimeRange()
+                .Build();
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Activate();
+
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
+        }
     }
     
     public class S2
     {
         [Fact]
-        public void ActivateEvent_Success_WhenEventIsActiveAndComplete()
+        public void ActivateEventWithUpdateStatus_Success_WhenEventIsActiveAndComplete()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -44,12 +61,29 @@ public abstract class ViaEventActivatesEventTests
             Assert.True(result.IsSuccess);
             Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
         }
+        
+        [Fact]
+        public void ActivateEvent_Success_WhenEventIsActiveAndComplete()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Some Title").WithStatus(ViaEventStatus.Ready)
+                .Build();
+            Assert.Equal(ViaEventStatus.Ready, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Activate();
+
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
+        }
     }
     
     public class S3
     {
         [Fact]
-        public void ActivateEvent_Success_StaysActiveWhenEventIsActive()
+        public void ActivateEventWithUpdateStatus_Success_StaysActiveWhenEventIsActive()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -64,13 +98,30 @@ public abstract class ViaEventActivatesEventTests
             Assert.True(result.IsSuccess);
             Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
         }
+        
+        [Fact]
+        public void ActivateEvent_Success_StaysActiveWhenEventIsActive()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Some Title").WithStatus(ViaEventStatus.Active)
+                .Build();
+            Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Activate();
+
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
+        }
     }
     
     public class F1
     {
         
         [Fact]
-        public void ActivateEvent_Failure_WhenEventIsDraftAndIncomplete()
+        public void ActivateEventWithUpdateStatus_Failure_WhenEventIsDraftAndIncomplete()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -89,12 +140,33 @@ public abstract class ViaEventActivatesEventTests
                 error => error.Message != null &&
                          error.Message.Contains("The title must be changed from the default."));
         }
+        
+        [Fact]
+        public void ActivateEvent_Failure_WhenEventIsDraftAndIncomplete()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithValidPastDateTimeRange()
+                .Build();
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Activate();
+            
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.BadRequest);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("The title must be changed from the default."));
+        }
     }
     
     public class F2
     {
         [Fact]
-        public void ActivateEvent_Failure_WhenEventIsCancelled()
+        public void ActivateEventWithUpdateStatus_Failure_WhenEventIsCancelled()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -113,6 +185,28 @@ public abstract class ViaEventActivatesEventTests
             Assert.Contains(result.OperationErrors,
                 error => error.Message != null &&
                          error.Message.Contains("Transitioning from 'Cancelled' to 'Active' status is not supported."));
+        }
+        
+        [Fact]
+        public void ActivateEvent_Failure_WhenEventIsCancelled()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
+                .WithStatus(ViaEventStatus.Cancelled)
+                .Build();
+            Assert.Equal(ViaEventStatus.Cancelled, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Activate();
+            
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Cancelled, viaEvent.Status);
+            Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.BadRequest);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("Cancelled events cannot be readied or activated."));
         }
     }
 

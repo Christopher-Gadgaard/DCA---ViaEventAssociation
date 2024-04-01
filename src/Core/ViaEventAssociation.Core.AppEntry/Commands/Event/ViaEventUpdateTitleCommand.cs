@@ -13,9 +13,12 @@ public class ViaEventUpdateTitleCommand
     {
         var eventId = ViaEventId.CreateFromString(id);
         var eventTitle = ViaEventTitle.Create(title);
-        var combinedResult = OperationResult<ViaEventUpdateTitleCommand>.Combine(eventId.OperationErrors, eventTitle.OperationErrors);
-        return combinedResult.OperationErrors.Count>0 ? combinedResult : new ViaEventUpdateTitleCommand(eventId.Payload, eventTitle.Payload);
+        var combinedResult =
+            OperationResult<ViaEventUpdateTitleCommand>.Combine(eventId.OperationErrors, eventTitle.OperationErrors);
+        return combinedResult.OperationErrors.Count > 0
+            ? combinedResult
+            : new ViaEventUpdateTitleCommand(eventId.Payload, eventTitle.Payload);
     }
-    
+
     private ViaEventUpdateTitleCommand(ViaEventId id, ViaEventTitle title) => (Id, Title) = (id, title);
 }

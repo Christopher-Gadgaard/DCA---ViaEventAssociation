@@ -10,19 +10,20 @@ public class ViaEventUpdateDescriptionHandler : ICommandHandler<ViaEventUpdateDe
 {
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     private ViaEventUpdateDescriptionHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
+
     public async Task<OperationResult> Handle(ViaEventUpdateDescriptionCommand command)
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
         var result = viaEvent.UpdateDescription(command.Description);
-        
+
         if (result.IsFailure)
         {
             return result;
         }
-        
+
         await _unitOfWork.SaveChangesAsync();
         return OperationResult.Success();
     }

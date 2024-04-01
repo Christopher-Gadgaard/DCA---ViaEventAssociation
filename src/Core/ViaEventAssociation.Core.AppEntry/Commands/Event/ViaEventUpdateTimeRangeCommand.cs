@@ -9,14 +9,20 @@ public class ViaEventUpdateTimeRangeCommand
 {
     public ViaEventId Id { get; }
     public ViaDateTimeRange DateTimeRange { get; }
-    
-    public static OperationResult<ViaEventUpdateTimeRangeCommand> Create(string id, DateTime start, DateTime end, ITimeProvider timeProvider)
+
+    public static OperationResult<ViaEventUpdateTimeRangeCommand> Create(string id, DateTime start, DateTime end,
+        ITimeProvider timeProvider)
     {
         var eventId = ViaEventId.CreateFromString(id);
         var dateTimeRange = ViaDateTimeRange.Create(start, end, timeProvider);
-        var combinedResult = OperationResult<ViaEventUpdateTimeRangeCommand>.Combine(eventId.OperationErrors, dateTimeRange.OperationErrors);
-        return combinedResult.OperationErrors.Count>0 ? combinedResult : new ViaEventUpdateTimeRangeCommand(eventId.Payload, dateTimeRange.Payload);
+        var combinedResult =
+            OperationResult<ViaEventUpdateTimeRangeCommand>.Combine(eventId.OperationErrors,
+                dateTimeRange.OperationErrors);
+        return combinedResult.OperationErrors.Count > 0
+            ? combinedResult
+            : new ViaEventUpdateTimeRangeCommand(eventId.Payload, dateTimeRange.Payload);
     }
-    
-    private ViaEventUpdateTimeRangeCommand(ViaEventId id, ViaDateTimeRange dateTimeRange) => (Id, DateTimeRange) = (id, dateTimeRange);
+
+    private ViaEventUpdateTimeRangeCommand(ViaEventId id, ViaDateTimeRange dateTimeRange) =>
+        (Id, DateTimeRange) = (id, dateTimeRange);
 }

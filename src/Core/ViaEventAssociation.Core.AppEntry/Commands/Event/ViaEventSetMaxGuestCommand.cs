@@ -8,14 +8,17 @@ public class ViaEventSetMaxGuestCommand
 {
     public ViaEventId Id { get; }
     public ViaMaxGuests MaxGuest { get; }
-    
+
     public static OperationResult<ViaEventSetMaxGuestCommand> Create(string id, int maxGuest)
     {
         var eventId = ViaEventId.CreateFromString(id);
         var mGuests = ViaMaxGuests.Create(maxGuest);
-        var combinedResult = OperationResult<ViaEventSetMaxGuestCommand>.Combine(eventId.OperationErrors, mGuests.OperationErrors);
-        return combinedResult.OperationErrors.Count>0 ? combinedResult : new ViaEventSetMaxGuestCommand(eventId.Payload, mGuests.Payload);
+        var combinedResult =
+            OperationResult<ViaEventSetMaxGuestCommand>.Combine(eventId.OperationErrors, mGuests.OperationErrors);
+        return combinedResult.OperationErrors.Count > 0
+            ? combinedResult
+            : new ViaEventSetMaxGuestCommand(eventId.Payload, mGuests.Payload);
     }
-    
+
     private ViaEventSetMaxGuestCommand(ViaEventId id, ViaMaxGuests maxGuest) => (Id, MaxGuest) = (id, maxGuest);
 }

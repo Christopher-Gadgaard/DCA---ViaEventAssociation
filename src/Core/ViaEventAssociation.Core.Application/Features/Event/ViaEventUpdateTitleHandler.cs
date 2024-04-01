@@ -18,12 +18,12 @@ public class ViaEventUpdateTitleHandler : ICommandHandler<ViaEventUpdateTitleCom
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
         var result = viaEvent.UpdateTitle(command.Title); //TODO: ASK ABOUT THIS
-        
+
         if (result.IsFailure)
         {
             return result;
         }
-        
+
         await _unitOfWork.SaveChangesAsync();
         return OperationResult.Success();
     }

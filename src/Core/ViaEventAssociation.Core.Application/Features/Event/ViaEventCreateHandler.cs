@@ -20,16 +20,16 @@ internal class ViaEventCreateHandler : ICommandHandler<ViaEventCreateCommand>
     public async Task<OperationResult> Handle(ViaEventCreateCommand command)
     {
         var result = ViaEvent.Create(command.Id);
-        
+
         if (result.IsFailure)
         {
             return result;
         }
-        
+
         await _eventRepository.AddAsync(result.Payload);
-        
+
         await _unitOfWork.SaveChangesAsync();
-        
+
         return OperationResult.Success();
     }
 }

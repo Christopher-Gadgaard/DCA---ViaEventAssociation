@@ -11,7 +11,7 @@ public abstract class ViaEventReadyEventTests
     public class S1
     {
         [Fact]
-        public void ReadyEvent_Success_WhenEventIsDraftAndComplete()
+        public void ReadyEventWithUpdateStatus_Success_WhenEventIsDraftAndComplete()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -27,12 +27,30 @@ public abstract class ViaEventReadyEventTests
             Assert.True(result.IsSuccess);
             Assert.Equal(ViaEventStatus.Ready, viaEvent.Status);
         }
+        
+        [Fact]
+        public void ReadyEvent_Success_WhenEventIsDraftAndComplete()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Some Title").WithValidPastDateTimeRange()
+                .Build();
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            
+            
+            // Act
+            var result = viaEvent.Ready();
+            
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Ready, viaEvent.Status);
+        }
     }
     
     public class F1_F4
     {
         [Fact]
-        public void ReadyEvent_Failure_WhenEventIsDraftAndIncomplete()
+        public void ReadyEventWithUpdateStatus_Failure_WhenEventIsDraftAndIncomplete()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -51,12 +69,33 @@ public abstract class ViaEventReadyEventTests
                 error => error.Message != null &&
                          error.Message.Contains("The title must be changed from the default."));
         }
+        
+        [Fact]
+        public void ReadyEvent_Failure_WhenEventIsDraftAndIncomplete()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
+                .Build();
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Ready();
+            
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.BadRequest);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("The title must be changed from the default."));
+        }
     }
     
     public class F2
     {
         [Fact]
-        public void ReadyEvent_Failure_WhenEventIsCancelled()
+        public void ReadyEventWithUpdateStatus_Failure_WhenEventIsCancelled()
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -76,12 +115,34 @@ public abstract class ViaEventReadyEventTests
                 error => error.Message != null &&
                          error.Message.Contains("Transitioning from 'Cancelled' to 'Ready' status is not supported."));
         }
+        
+        [Fact]
+        public void ReadyEvent_Failure_WhenEventIsCancelled()
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
+                .WithStatus(ViaEventStatus.Cancelled)
+                .Build();
+            Assert.Equal(ViaEventStatus.Cancelled, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Ready();
+            
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Cancelled, viaEvent.Status);
+            Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.BadRequest);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("Cancelled events cannot be readied or activated."));
+        }
     }
     
     public class F3
     {
         [Fact]
-        public void ReadyEvent_Failure_WhenEventIsInThePast() //TODO: FIX THIS TEST
+        public void ReadyEventWithUpdateStatus_Failure_WhenEventIsInThePast() //TODO: FIX THIS TEST
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
@@ -105,5 +166,29 @@ public abstract class ViaEventReadyEventTests
                          error.Message.Contains("The start time cannot be in the past."));
         }
         
+        [Fact]
+        public void ReadyEvent_Failure_WhenEventIsInThePast() //TODO: FIX THIS TEST
+        {
+            // Arrange
+            var viaEventId = ViaEventId.Create();
+            var fakeTimeProvider = new FakeTimeProvider( DateTime.Now);
+            var dateTimeRangeResult = ViaDateTimeRange.Create(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(-1).AddHours(1), fakeTimeProvider);
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
+                .WithStatus(ViaEventStatus.Draft)
+                .WithDateTimeRange(dateTimeRangeResult.Payload)
+                .Build();
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            
+            // Act
+            var result = viaEvent.Ready();
+            
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
+            Assert.Contains(result.OperationErrors, e => e.Code == ErrorCode.BadRequest);
+            Assert.Contains(result.OperationErrors,
+                error => error.Message != null &&
+                         error.Message.Contains("The start time cannot be in the past."));
+        }
     }
 }
