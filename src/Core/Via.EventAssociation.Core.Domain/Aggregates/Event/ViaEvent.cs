@@ -35,6 +35,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     internal ViaEventStatus Status => _status;
     internal ViaEventVisibility Visibility => _visibility;
     internal IEnumerable<ViaGuestId> Guests => _guests;
+    internal IEnumerable<ViaInvitation> Invitations => _invitations;
 
     private ViaEvent(
         ViaEventId id,

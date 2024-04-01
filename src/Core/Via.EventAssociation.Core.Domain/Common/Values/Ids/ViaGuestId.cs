@@ -31,6 +31,7 @@ public class ViaGuestId :ViaId
             });
         }
     }
+    
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

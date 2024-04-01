@@ -1,7 +1,9 @@
-﻿using UnitTests.Common.Factories;
+﻿using Moq;
+using UnitTests.Common.Factories;
 using UnitTests.Fakes;
 using UnitTests.Fakes.Repositories;
 using UnitTests.Features.Event;
+using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using ViaEventAssociation.Core.AppEntry.Commands.Event;
@@ -28,12 +30,14 @@ public class GuestCancelsParticipationHandlerTest
         Assert.True(viaEvent.IsParticipant(guest.Id));
         Assert.Contains(guest.Id, viaEvent.Guests);
         var guestRepo = new FakeGuestRepository();
-        var eventRepo = new FakeEventRepository();
+        // var eventRepo = new FakeEventRepository();
+        var eventRepo = new Mock<IViaEventRepository>(); 
+        eventRepo.Setup( x=> x.GetByIdAsync(It.IsAny<ViaEventId>())).Returns(Task.FromResult(viaEvent));
         var command = GuestCancelsParticipationCommand.Create(viaEvent.Id.Value.ToString(), guest.Id.Value.ToString());
         
         Assert.True(command.IsSuccess);
         
-        var handler = new GuestCancelsParticipationHandler(guestRepo, eventRepo, _fakeUnitOfWork);
+        var handler = new GuestCancelsParticipationHandler(guestRepo, eventRepo.Object, _fakeUnitOfWork);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
         var result = await handler.Handle(command.Payload);    
         

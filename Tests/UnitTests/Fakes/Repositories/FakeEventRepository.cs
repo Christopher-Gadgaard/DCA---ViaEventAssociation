@@ -9,12 +9,12 @@ public class FakeEventRepository : IViaEventRepository
 {
     public List<ViaEvent> Events { get; set; } = new();
 
-    /*public Task<ViaEvent?> GetByIdAsync(ViaId id)
-    {
-        var eventId = ViaEventId.Create().Payload;
-        var viaEvent = ViaEventTestDataFactory.Init(eventId).WithStatus(ViaEventStatus.Active).WithVisibility(ViaEventVisibility.Public).Build();
-        return Task.FromResult(viaEvent)!;
-    }*/
+    // public Task<ViaEvent?> GetByIdAsync(ViaId id)
+    // {
+    //     var eventId = ViaEventId.Create().Payload;
+    //     var viaEvent = ViaEventTestDataFactory.Init(eventId).WithStatus(ViaEventStatus.Active).WithVisibility(ViaEventVisibility.Public).Build();
+    //     return Task.FromResult(viaEvent)!;
+    // }
 
     public Task<ViaEvent?> GetByIdAsync(ViaId id)
     {
