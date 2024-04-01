@@ -20,7 +20,7 @@ public class ViaDateTimeRange : ValueObject
         TimeProvider = timeProvider;
     }
 
-    internal static OperationResult<ViaDateTimeRange> Create(DateTime startValue, DateTime endValue, ITimeProvider timeProvider )
+    public static OperationResult<ViaDateTimeRange> Create(DateTime startValue, DateTime endValue, ITimeProvider timeProvider )
     {
         var validation = Validate(startValue, endValue, timeProvider);
         if (validation.IsSuccess)

@@ -81,11 +81,11 @@ public abstract class ViaEventReadyEventTests
     public class F3
     {
         [Fact]
-        public void ReadyEvent_Failure_WhenEventIsInThePast()
+        public void ReadyEvent_Failure_WhenEventIsInThePast() //TODO: FIX THIS TEST
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var fakeTimeProvider = new FakeTimeProvider( DateTime.Now.AddDays(-2));
+            var fakeTimeProvider = new FakeTimeProvider( DateTime.Now);
             var dateTimeRangeResult = ViaDateTimeRange.Create(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(-1).AddHours(1), fakeTimeProvider);
             var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Test Title")
                 .WithStatus(ViaEventStatus.Draft)

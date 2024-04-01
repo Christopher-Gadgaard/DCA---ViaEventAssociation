@@ -164,6 +164,11 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult.Success();
     }
 
+    public OperationResult Ready()
+    {
+        return TryReadyEvent();
+    }
+
     public OperationResult SetMaxGuests(ViaMaxGuests maxGuests)
     {
         if (_status is ViaEventStatus.Cancelled)
@@ -275,6 +280,13 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult AddParticipant(ViaGuestId guestId)
     {
+        if (_dateTimeRange.IsPast)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "Cannot add participation too past events.")
+            });
+        }
         if (_status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>

@@ -1,7 +1,9 @@
-﻿using Moq;
+﻿
 using UnitTests.Common.Factories;
+using UnitTests.Common.Utilities;
 using UnitTests.Features.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
+using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 
@@ -149,12 +151,18 @@ public class GuestParticipatesToPublicEventTest
     [Fact]
     public void Guest_Participation_Fails_When_Event_Start_Time_Is_In_The_Past()
     {
+        var startTime = new DateTime(2020, 1, 2, 10, 0, 0);
+        var endTime = new DateTime(2020, 1, 2, 16, 0, 0);
+        FakeTimeProvider fakeTimeProvider = new(new DateTime(2020, 1, 3, 10, 0, 0));
+        
+        var dateTimeRange = ViaDateTimeRange.Create(startTime,endTime,fakeTimeProvider);
+        
         // Arrange
         var pastStartTime = DateTime.UtcNow.AddDays(-1);
         var pastEndTime = DateTime.UtcNow.AddHours(-23);
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
-            .WithDateTimeRange(pastStartTime, pastEndTime)
+            .WithDateTimeRange(dateTimeRange.Payload)
             .WithStatus(ViaEventStatus.Active)
             .WithVisibility(ViaEventVisibility.Public)
             .Build();
