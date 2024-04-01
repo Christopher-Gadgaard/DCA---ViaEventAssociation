@@ -8,33 +8,33 @@
     * [x] Command
     * [x] Handler
 
-* [ ] UC3
-    * [ ] Command
-    * [ ] Handler
+* [x] UC3
+    * [x] Command
+    * [x] Handler
 
-* [ ] UC4
-    * [ ] Command
-    * [ ] Handler
+* [x] UC4
+    * [x] Command
+    * [x] Handler
 
-* [ ] UC5
-    * [ ] Command
-    * [ ] Handler
+* [x] UC5
+    * [x] Command
+    * [x] Handler
 
-* [ ] UC6
-    * [ ] Command
-    * [ ] Handler
+* [x] UC6
+    * [x] Command
+    * [x] Handler
 
-* [ ] UC7
-    * [ ] Command
-    * [ ] Handler
+* [x] UC7
+    * [x] Command
+    * [x] Handler
 
-* [ ] UC8
-    * [ ] Command
-    * [ ] Handler
+* [x] UC8
+    * [x] Command
+    * [x] Handler
 
-* [ ] UC9
-    * [ ] Command
-    * [ ] Handler
+* [x] UC9
+    * [x] Command
+    * [x] Handler
 
 * [X] UC10
     * [X] Command
