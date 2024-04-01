@@ -16,10 +16,14 @@ public class GuestCancelsParticipationCommand
     
     public static OperationResult<GuestCancelsParticipationCommand> Create(string eventId, string guestId)
     {
-        OperationResult<ViaEventId> eventResult = ViaEventId.Create();
-        OperationResult<ViaGuestId> guestResult = ViaGuestId.Create();
-        OperationResult<GuestCancelsParticipationCommand> combinedResult = OperationResult<GuestCancelsParticipationCommand>.Combine(eventResult.OperationErrors, guestResult.OperationErrors);
+        OperationResult<ViaEventId> eventResult = ViaEventId.CreateFromString(eventId);
+        OperationResult<ViaGuestId> guestResult = ViaGuestId.Create(guestId);
+        
+        if( eventResult.IsSuccess && guestResult.IsSuccess)
+        {
+            return OperationResult<GuestCancelsParticipationCommand>.Success(new GuestCancelsParticipationCommand(eventResult.Payload, guestResult.Payload));
+        }
 
-        return combinedResult;
+        return OperationResult<GuestCancelsParticipationCommand>.Combine(eventResult.OperationErrors, guestResult.OperationErrors);
     }
 }

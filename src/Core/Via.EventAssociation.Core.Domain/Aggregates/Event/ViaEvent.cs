@@ -286,14 +286,6 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
     public OperationResult AddParticipant(ViaGuestId guestId)
     {
-        if (DateTimeRange.IsPast)
-        {
-            return OperationResult.Failure(new List<OperationError>
-            {
-                new(ErrorCode.BadRequest, "Cannot add participation too past events.")
-            });
-        }
-
         if (Status != ViaEventStatus.Active)
         {
             return OperationResult.Failure(new List<OperationError>
@@ -310,6 +302,12 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         {
             return OperationResult.Failure(new List<OperationError>
                 {new OperationError(ErrorCode.Conflict, "The event is full.")});
+        }
+
+        if (DateTimeRange.IsPast)
+        {
+            return OperationResult.Failure(new List<OperationError>
+                {new OperationError(ErrorCode.BadRequest, "Cannot add participants to past events.")});
         }
 
         if (IsParticipant(guestId))
@@ -332,7 +330,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (DateTimeRange.StartValue <= DateTime.Now)
+        if (DateTimeRange.IsPast)
         {
             return OperationResult.Failure(new List<OperationError>
             {

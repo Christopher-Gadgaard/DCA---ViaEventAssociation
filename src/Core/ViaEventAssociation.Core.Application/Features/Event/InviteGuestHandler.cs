@@ -16,7 +16,7 @@ internal class InviteGuestHandler : ICommandHandler<InviteGuestCommand>
     private readonly IViaEventRepository _eventRepository;
     private readonly IViaGuestRepository _guestRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private IViaInvitationRepository _invitationRepository;
+    private readonly IViaInvitationRepository _invitationRepository;
 
     internal InviteGuestHandler(IViaEventRepository eventRepository, IViaGuestRepository guestRepository,
         IUnitOfWork unitOfWork, IViaInvitationRepository invitationRepository)
@@ -37,7 +37,7 @@ internal class InviteGuestHandler : ICommandHandler<InviteGuestCommand>
 
         ViaGuest? viaGuest = await _guestRepository.GetByIdAsync(command.GuestId);
         if (viaGuest == null)
-        {
+        { 
             return OperationResult.Failure(new List<OperationError> { new(ErrorCode.NotFound, "Guest not found") });
         }
 
