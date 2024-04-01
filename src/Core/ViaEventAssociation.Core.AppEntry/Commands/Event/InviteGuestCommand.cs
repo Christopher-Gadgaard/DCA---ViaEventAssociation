@@ -20,6 +20,11 @@ public class InviteGuestCommand
         OperationResult<ViaGuestId> guestResult = ViaGuestId.Create(guestId);
         OperationResult<InviteGuestCommand> combinedResult = OperationResult<InviteGuestCommand>.Combine(eventResult.OperationErrors, guestResult.OperationErrors);
 
+        if(combinedResult.IsSuccess)
+        {
+            return OperationResult<InviteGuestCommand>.Success(new InviteGuestCommand(eventResult.Payload, guestResult.Payload));
+        }
+
         return combinedResult;
     }
 }
