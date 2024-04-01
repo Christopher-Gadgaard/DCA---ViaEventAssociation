@@ -7,7 +7,6 @@ public class ViaEventId : ViaId
 {
     private ViaEventId(Guid value) : base(value)
     {
-        
     }
 
     public static OperationResult<ViaEventId> Create()
@@ -16,19 +15,17 @@ public class ViaEventId : ViaId
         return new ViaEventId(id);
     }
 
-    public static OperationResult<ViaEventId> Create(string id)
+    public static OperationResult<ViaEventId> CreateFromString(string id)
     {
         if (Guid.TryParse(id, out Guid guid))
         {
             return OperationResult<ViaEventId>.Success(new ViaEventId(guid));
         }
-        else
+
+        return OperationResult<ViaEventId>.Failure(new List<OperationError>
         {
-            return OperationResult<ViaEventId>.Failure(new List<OperationError>
-            {
-                new OperationError(ErrorCode.InvalidInput, "Invalid id")
-            });
-        }
+            new(ErrorCode.InvalidInput, "Invalid id")
+        });
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -15,8 +15,6 @@ public class ViaEventTestDataFactory
     private ViaEvent _event;
     private static ITimeProvider _timeProvider;
 
-   
-
     public static ViaEventTestDataFactory Init(ViaEventId id)
     {
         return new ViaEventTestDataFactory(id, new SystemTimeProvider());

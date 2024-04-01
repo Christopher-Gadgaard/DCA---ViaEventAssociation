@@ -5,5 +5,5 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Event;
 
 public interface IViaEventRepository: IViaRepository<ViaEvent, ViaId>
 {
-
+    
 }

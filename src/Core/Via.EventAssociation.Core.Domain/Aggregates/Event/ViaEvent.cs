@@ -232,7 +232,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         if (_dateTimeRange is null || _dateTimeRange.IsPast)
             errorMessages.Add("The start time cannot be in the past.");
 
-        if (_maxGuests == null)
+        if (_maxGuests is null)
             errorMessages.Add("The max guests must be set.");
 
         return errorMessages.Count == 0;
@@ -309,7 +309,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         {
             return OperationResult.Failure(new List<OperationError>
             {
-                new OperationError(ErrorCode.NotFound, "The guest is not a participant of this event.")
+                new(ErrorCode.NotFound, "The guest is not a participant of this event.")
             });
         }
 
@@ -317,7 +317,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         {
             return OperationResult.Failure(new List<OperationError>
             {
-                new OperationError(ErrorCode.BadRequest, "Cannot remove participation from ongoing or past events.")
+                new(ErrorCode.BadRequest, "Cannot remove participation from ongoing or past events.")
             });
         }
 

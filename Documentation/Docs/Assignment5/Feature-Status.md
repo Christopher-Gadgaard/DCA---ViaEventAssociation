@@ -1,8 +1,8 @@
 ﻿# Feature Status
 
-* [ ] UC1
-  * [ ] Command
-  * [ ] Handler
+* [x] UC1
+  * [x] Command
+  * [x] Handler
 
 * [ ] UC2
     * [ ] Command

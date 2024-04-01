@@ -6,23 +6,30 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-internal class ViaCreateViaEventHandler : ICommandHandler<ViaCreateViaEventCommand>
+internal class ViaEventCreateHandler : ICommandHandler<ViaEventCreateCommand>
 {
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    internal ViaCreateViaEventHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork)
+    internal ViaEventCreateHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork)
     {
         _eventRepository = eventRepository;
         _unitOfWork = unitOfWork;
     }
 
-    public Task<OperationResult> Handle(ViaCreateViaEventCommand command)
+    public async Task<OperationResult> Handle(ViaEventCreateCommand command)
     {
-        /*var viaEvent = ViaEvent.Create(command.TimeProvider);
-        _eventRepository.AddAsync(viaEvent);
-        _unitOfWork.SaveChangesAsync();
-        return OperationResult.Success();*/
-        throw new NotImplementedException();
+        var result = ViaEvent.Create(command.Id);
+        
+        if (result.IsFailure)
+        {
+            return result;
+        }
+        
+        await _eventRepository.AddAsync(result.Payload);
+        
+        await _unitOfWork.SaveChangesAsync();
+        
+        return OperationResult.Success();
     }
 }

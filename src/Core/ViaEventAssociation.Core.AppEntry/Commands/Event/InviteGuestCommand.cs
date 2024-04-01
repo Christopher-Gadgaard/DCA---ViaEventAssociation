@@ -16,7 +16,7 @@ public class InviteGuestCommand
 
     public static OperationResult<InviteGuestCommand> Create(string eventId, string guestId)
     {
-        OperationResult<ViaEventId> eventResult = ViaEventId.Create(eventId);
+        OperationResult<ViaEventId> eventResult = ViaEventId.CreateFromString(eventId);
         OperationResult<ViaGuestId> guestResult = ViaGuestId.Create(guestId);
         OperationResult<InviteGuestCommand> combinedResult = OperationResult<InviteGuestCommand>.Combine(eventResult.OperationErrors, guestResult.OperationErrors);
 
