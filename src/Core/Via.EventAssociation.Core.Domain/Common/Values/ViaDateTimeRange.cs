@@ -3,34 +3,35 @@ using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
+
 namespace Via.EventAssociation.Core.Domain.Common.Values;
 
 public class ViaDateTimeRange : ValueObject
 {
-    public DateTime StartValue { get; private init; }
-    public DateTime EndValue { get; private init; }
+    internal DateTime StartValue { get; private init; }
+    internal DateTime EndValue { get; private init; }
     
-    private static ITimeProvider _timeProvider;
+    private ITimeProvider TimeProvider { get; }
 
-    private ViaDateTimeRange(DateTime startValue, DateTime endValue)
+    private ViaDateTimeRange(DateTime startValue, DateTime endValue, ITimeProvider timeProvider)
     {
         StartValue = startValue;
         EndValue = endValue;
+        TimeProvider = timeProvider;
     }
 
     internal static OperationResult<ViaDateTimeRange> Create(DateTime startValue, DateTime endValue, ITimeProvider timeProvider )
     {
-        _timeProvider = timeProvider;
-        var validation = Validate(startValue, endValue);
+        var validation = Validate(startValue, endValue, timeProvider);
         if (validation.IsSuccess)
         {
-            return new ViaDateTimeRange(startValue, endValue);
+            return new ViaDateTimeRange(startValue, endValue, timeProvider);
         }
 
         return validation.OperationErrors;
     }
     
-    private static OperationResult Validate(DateTime startValue, DateTime endValue)
+    private static OperationResult Validate(DateTime startValue, DateTime endValue, ITimeProvider timeProvider)
     {
         var errors = new List<OperationError>();
         
@@ -38,10 +39,12 @@ public class ViaDateTimeRange : ValueObject
         ValidateEventDuration(startValue, endValue, errors);
         ValidateStartTime(startValue, errors);
         ValidateEndTimeIfNextDay(startValue, endValue, errors);
-        ValidateStartTimeIsNotInThePast(startValue, errors);
+        ValidateStartTimeIsNotInThePast(startValue, timeProvider, errors);
 
-        return errors.Count != 0 ? OperationResult<ViaDateTimeRange>.Failure(errors) : OperationResult<ViaDateTimeRange>.Success(new ViaDateTimeRange(startValue, endValue));
+        return errors.Count != 0 ? OperationResult<ViaDateTimeRange>.Failure(errors) : OperationResult<ViaDateTimeRange>.Success(new ViaDateTimeRange(startValue, endValue, timeProvider));
     }
+    
+    internal bool IsPast => StartValue < TimeProvider.Now;
 
     private static void ValidateStartBeforeEndTime(DateTime startValue, DateTime endValue, ICollection<OperationError> errors)
     {
@@ -76,15 +79,21 @@ public class ViaDateTimeRange : ValueObject
         }
     }
 
-    private static void ValidateStartTimeIsNotInThePast(DateTime startValue, ICollection<OperationError> errors)
+    private static void ValidateStartTimeIsNotInThePast(DateTime startValue, ITimeProvider timeProvider, ICollection<OperationError> errors)
     {
-        if (startValue.AddSeconds(30) < _timeProvider.Now)
+        if (startValue.AddSeconds(30) < timeProvider.Now)
         {
             errors.Add(new OperationError(ErrorCode.BadRequest, "The start time cannot be in the past."));
         }
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return StartValue;
+        yield return EndValue;
+    }
+
+    public static ViaDateTimeRange Default()
     {
         throw new NotImplementedException();
     }

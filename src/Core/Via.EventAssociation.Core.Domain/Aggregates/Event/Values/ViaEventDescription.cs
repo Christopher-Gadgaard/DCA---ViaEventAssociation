@@ -35,8 +35,11 @@ public class ViaEventDescription : ValueObject
         return OperationResult<string>.Success(description);
     }
 
+    internal static ViaEventDescription Default() => new("");
+    
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
+
 }

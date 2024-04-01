@@ -33,9 +33,12 @@ public class ViaMaxGuests : ValueObject
 
         return OperationResult<int>.Success(maxGuests);
     }
+    
+    internal static ViaMaxGuests Default() => new(5);
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
+
 }

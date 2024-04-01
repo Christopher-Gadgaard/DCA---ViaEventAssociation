@@ -5,17 +5,26 @@ using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace UnitTests.Fakes.Repositories;
 
-public class FakeEventRepository:IViaEventRepository
+public class FakeEventRepository : IViaEventRepository
 {
-    public Task<ViaEvent?> GetByIdAsync(ViaId id)
+    public List<ViaEvent> Events { get; set; } = new();
+
+    /*public Task<ViaEvent?> GetByIdAsync(ViaId id)
     {
         var eventId = ViaEventId.Create().Payload;
         var viaEvent = ViaEventTestDataFactory.Init(eventId).WithStatus(ViaEventStatus.Active).WithVisibility(ViaEventVisibility.Public).Build();
         return Task.FromResult(viaEvent)!;
+    }*/
+
+    public Task<ViaEvent?> GetByIdAsync(ViaId id)
+    {
+        var viaEvent = Events.FirstOrDefault(x => x.Id == id);
+        return Task.FromResult(viaEvent);
     }
 
     public Task AddAsync(ViaEvent entity)
     {
+        Events.Add(entity);
         return Task.CompletedTask;
     }
 
@@ -34,5 +43,10 @@ public class FakeEventRepository:IViaEventRepository
         var eventId = ViaEventId.Create().Payload;
         var viaEvent = ViaEventTestDataFactory.Init(eventId).Build();
         return Task.FromResult(viaEvent);
+    }
+    
+    public void AddEvent(ViaEvent viaEvent)
+    {
+        Events.Add(viaEvent);
     }
 }

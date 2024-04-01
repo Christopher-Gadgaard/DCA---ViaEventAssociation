@@ -16,7 +16,7 @@ public class GuestParticipateCommand
 
     public static OperationResult<GuestParticipateCommand> Create(Guid eventId, Guid guestId)
     {
-        OperationResult<ViaEventId> eventResult = ViaEventId.Create(eventId.ToString());
+        OperationResult<ViaEventId> eventResult = ViaEventId.CreateFromString(eventId.ToString());
         OperationResult<ViaGuestId> guestResult = ViaGuestId.Create(guestId.ToString());
         if (eventResult.IsSuccess && guestResult.IsSuccess)
         {

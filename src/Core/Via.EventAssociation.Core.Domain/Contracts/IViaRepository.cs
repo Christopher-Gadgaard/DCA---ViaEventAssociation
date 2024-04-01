@@ -2,14 +2,11 @@
 
 namespace Via.EventAssociation.Core.Domain.Contracts;
 
-public interface IViaRepository<T, ViaId>
+public interface IViaRepository<T, in TViaId>
 {
- 
-   Task<T?> GetByIdAsync(ViaId id);
-    Task AddAsync(T entity);    
-   Task UpdateAsync(T entity);
-   Task DeleteAsync(ViaId id);
+    Task<T?> GetByIdAsync(TViaId id);
+    Task AddAsync(T entity);
+    Task UpdateAsync(T entity);
+    Task DeleteAsync(TViaId id);
     Task<T> GetAllAsync();
-    
-
 }

@@ -2,7 +2,7 @@
 
 namespace UnitTests.Fakes;
 
-public class FakeUnitOfWork:IUnitOfWork
+public class FakeUnitOfWork : IUnitOfWork
 {
     public Task SaveChangesAsync()
     {
