@@ -313,7 +313,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (_dateTimeRange.StartValue <= DateTime.Now)
+        if (DateTime.Compare(_dateTimeRange.StartValue, DateTime.Now)<=0)
         {
             return OperationResult.Failure(new List<OperationError>
             {

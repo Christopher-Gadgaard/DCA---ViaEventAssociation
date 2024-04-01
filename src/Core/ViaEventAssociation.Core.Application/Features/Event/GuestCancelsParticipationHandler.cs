@@ -11,43 +11,43 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-internal class GuestCancelsParticipationHandler:ICommandHandler<GuestCancelsParticipationCommand>
+internal class GuestCancelsParticipationHandler : ICommandHandler<GuestCancelsParticipationCommand>
 {
     private readonly IViaGuestRepository _guestRepository;
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
-    
-    internal GuestCancelsParticipationHandler( IViaGuestRepository guestRepository, IViaEventRepository eventRepository, IUnitOfWork unitOfWork)
+
+    internal GuestCancelsParticipationHandler(IViaGuestRepository guestRepository, IViaEventRepository eventRepository,
+        IUnitOfWork unitOfWork)
     {
         _guestRepository = guestRepository;
         _eventRepository = eventRepository;
         _unitOfWork = unitOfWork;
     }
-    
+
     public async Task<OperationResult> Handle(GuestCancelsParticipationCommand command)
     {
         ViaEvent? viaEvent = await _eventRepository.GetByIdAsync(command.EventId);
-        if(viaEvent == null)
+        if (viaEvent == null)
         {
-            return OperationResult.Failure(new List<OperationError>{new(ErrorCode.NotFound, "Event not found")});
+            return OperationResult.Failure(new List<OperationError> { new(ErrorCode.NotFound, "Event not found") });
         }
+
         ViaGuest? viaGuest = await _guestRepository.GetByIdAsync(command.GuestId);
-        if(viaGuest == null)
+        if (viaGuest == null)
         {
-            return OperationResult.Failure(new List<OperationError>{new(ErrorCode.NotFound, "Guest not found")});
+            return OperationResult.Failure(new List<OperationError> { new(ErrorCode.NotFound, "Guest not found") });
         }
+
         OperationResult result = viaEvent.RemoveParticipant(viaGuest.Id);
-        if(result.IsFailure)
-        {
-            return OperationResult.Failure(result.OperationErrors);
-        }
-        if(result.IsSuccess)
+      
+        if (result.IsSuccess)
         {
             await _eventRepository.UpdateAsync(viaEvent);
+            await _guestRepository.UpdateAsync(viaGuest);
             await _unitOfWork.SaveChangesAsync();
         }
+
         return result;
     }
-
-  
 }

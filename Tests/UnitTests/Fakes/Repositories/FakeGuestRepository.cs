@@ -19,12 +19,12 @@ public class FakeGuestRepository:IViaGuestRepository
 
     public Task UpdateAsync(ViaGuest entity)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task DeleteAsync(ViaGuestId id)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task<ViaGuest> GetAllAsync()
