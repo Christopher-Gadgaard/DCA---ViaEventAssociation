@@ -18,11 +18,15 @@ public class GuestDeclinesInvitationCommand
     
     public static OperationResult<GuestDeclinesInvitationCommand> Create(string eventId, string guestId, string invitationId)
     {
-        OperationResult<ViaEventId> eventResult = ViaEventId.Create();
-        OperationResult<ViaGuestId> guestResult = ViaGuestId.Create();
-        OperationResult<ViaInvitationId> invitationResult = ViaInvitationId.Create();
+        OperationResult<ViaEventId> eventResult = ViaEventId.CreateFromString(eventId);
+        OperationResult<ViaGuestId> guestResult = ViaGuestId.Create(guestId);
+        OperationResult<ViaInvitationId> invitationResult = ViaInvitationId.Create(invitationId);
         OperationResult<GuestDeclinesInvitationCommand> combinedResult = OperationResult<GuestDeclinesInvitationCommand>.Combine(eventResult.OperationErrors, guestResult.OperationErrors, invitationResult.OperationErrors);
 
+        if(combinedResult.IsSuccess)
+        {
+            return OperationResult<GuestDeclinesInvitationCommand>.Success(new GuestDeclinesInvitationCommand(eventResult.Payload, guestResult.Payload, invitationResult.Payload));
+        }
         return combinedResult;
     }
 }

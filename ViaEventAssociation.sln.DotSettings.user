@@ -38,6 +38,11 @@
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.InviteGuest.InviteGuestHandlerTest.GivenNothing_CreatingHandlerShouldSucceed&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5b361827_002D0b4a_002D4347_002D983b_002D4e2b2f333045/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GivenNothing_CreatingCommandShouldFailEmptyInvitationId" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationTest.GivenNothing_CreatingCommandShouldFailEmptyInvitationId&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7221880c_002Dc312_002D4fe0_002Dae0a_002Dcd688f72e2ae/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Guest_Removal_Does_Nothing_When_Not_A_Participant" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Guest.CancelParticipation.GuestCancelsEventParticipationTest.Guest_Removal_Does_Nothing_When_Not_A_Participant&lt;/TestId&gt;&#xD;
@@ -98,6 +103,15 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c37f2569_002Dc53d_002D4856_002D9cc2_002Df1f704c91ca5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GivenNothing_CreatingHandlerShouldFailWhenNoInvitation" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestAcceptsInvitation.GuestAcceptsInvitationHandlerTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationTest.GivenNothing_CreatingCommandShouldSucceed&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationTest.GivenNothing_CreatingCommandShouldFailEmptyInvitationId&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationCommandTest.GivenNothing_CreatingCommandShouldSucceed&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationCommandTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationHandlerTest.GivenNothing_CreatingHandlerShouldSucceed&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationHandlerTest.GivenNothing_CreatingHandlerShouldFail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationHandlerTest.GivenNothing_CreatingHandlerShouldFailEmptyInvitationId&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DE66EBCF-BF35-4C8D-AD48-F1ED0DA4FCFA::net8.0::UnitTests.Features.Event.GuestDeclinesInvitation.GuestDeclinesInvitationHandlerTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d0194bfc_002D427e_002D4ff7_002Dabf0_002D8d1b5caafe22/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
