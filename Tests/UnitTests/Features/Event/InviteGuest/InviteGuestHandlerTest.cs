@@ -23,7 +23,7 @@ public class InviteGuestHandlerTest
             .WithStatus(ViaEventStatus.Active).Build();
         eventRepository.AddEvent(viaEvent);
         var guest = ViaGuestTestFactory.CreateValidViaGuest();
-
+        guestRepository.AddGuest(guest);
         var command = InviteGuestCommand.Create(eventId.Value.ToString(), guest.Id.Value.ToString());
 
 

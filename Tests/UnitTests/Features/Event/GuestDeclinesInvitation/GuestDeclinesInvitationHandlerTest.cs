@@ -26,7 +26,7 @@ public class GuestDeclinesInvitationHandlerTest
             .WithInvitations(new List<ViaInvitation> { invitation })
             .WithVisibility(ViaEventVisibility.Private).Build();
         eventRepository.AddEvent(viaEvent);
-        
+        guestRepository.AddGuest(guest);
         Assert.True(invitation.Status==ViaInvitationStatus.Pending);
         
         var command = GuestDeclinesInvitationCommand.Create(eventId.Value.ToString(), guest.Id.Value.ToString(),

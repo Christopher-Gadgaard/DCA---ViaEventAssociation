@@ -18,6 +18,7 @@ public class GuestCancelsParticipationCommand
     {
         OperationResult<ViaEventId> eventResult = ViaEventId.CreateFromString(eventId);
         OperationResult<ViaGuestId> guestResult = ViaGuestId.Create(guestId);
+        
         if( eventResult.IsSuccess && guestResult.IsSuccess)
         {
             return OperationResult<GuestCancelsParticipationCommand>.Success(new GuestCancelsParticipationCommand(eventResult.Payload, guestResult.Payload));

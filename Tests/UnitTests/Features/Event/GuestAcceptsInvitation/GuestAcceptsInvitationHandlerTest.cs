@@ -21,6 +21,7 @@ public class GuestAcceptsInvitationHandlerTest
 
         var eventId = ViaEventId.Create().Payload;
         var guest = ViaGuestTestFactory.CreateValidViaGuest();
+        guestRepository.AddGuest(guest);
         var invitation = ViaInvitationFactory.CreateValidViaInvitation(eventId, guest.Id);
         var viaEvent = ViaEventTestDataFactory.Init(eventId).WithStatus(ViaEventStatus.Active)
             .WithInvitations(new List<ViaInvitation> { invitation })

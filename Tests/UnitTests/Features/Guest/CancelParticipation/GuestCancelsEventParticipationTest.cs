@@ -6,6 +6,7 @@ using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Aggregates.Guests;
 using Via.EventAssociation.Core.Domain.Aggregates.Locations;
+using Via.EventAssociation.Core.Domain.Common.Utilities;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 using Via.EventAssociation.Core.Domain.Contracts;
@@ -18,7 +19,7 @@ public class GuestCancelsEventParticipationTest
     [Fact]
     public void Guest_Removes_Participation_From_Public_Event_Successfully()
     {
-        // Arrange
+      
         var eventId= ViaEventId.Create().Payload;
         var viaEvent = ViaEventTestDataFactory.Init(eventId)
             .WithStatus(ViaEventStatus.Active)

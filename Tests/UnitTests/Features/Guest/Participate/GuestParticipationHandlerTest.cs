@@ -25,6 +25,7 @@ public class GuestParticipationHandlerTest
 
         var guest = ViaGuestTestFactory.CreateValidViaGuest();
         var guestRepo = new FakeGuestRepository();
+        guestRepo.AddGuest(guest);
         var eventRepo = new FakeEventRepository();
         eventRepo.AddEvent(viaEvent);
         var command = GuestParticipateCommand.Create(viaEvent.Id.Value, guest.Id.Value);

@@ -20,6 +20,8 @@ public class GuestCancelsParticipationCommandTest
         var result = GuestCancelsParticipationCommand.Create(viaEvent.Id.Value.ToString(), guest.Id.Value.ToString());
 
         Assert.True(result.IsSuccess);
+        Assert.Equal(viaEvent.Id, result.Payload.EventId);
+        Assert.Equal(guest.Id, result.Payload.GuestId);
     }
     
     [Fact]

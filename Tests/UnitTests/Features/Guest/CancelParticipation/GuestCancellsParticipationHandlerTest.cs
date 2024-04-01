@@ -13,31 +13,33 @@ namespace UnitTests.Features.Guest.CancelParticipation;
 
 public class GuestCancelsParticipationHandlerTest
 {
-    private readonly FakeUnitOfWork _fakeUnitOfWork;
+    
     
     [Fact]
     public  async Task GivenNothing_WhenCreatingHandler_Success()
     {
         var guest = ViaGuestTestFactory.CreateValidViaGuest();
         var eventId = ViaEventId.Create().Payload;
-        var startDate = DateTime.Now.AddDays(1);
-        var endDate = startDate.AddHours(2);
+    
         var viaEvent = ViaEventTestDataFactory.Init(eventId).WithStatus(ViaEventStatus.Active)
-            .WithVisibility(ViaEventVisibility.Public).WithDateTimeRange(startDate,endDate).WithGuests(new List<ViaGuestId>{guest.Id}).Build();
+            .WithVisibility(ViaEventVisibility.Public).WithGuests(new List<ViaGuestId>{guest.Id}).Build();
 
         Assert.Single(viaEvent.Guests);
         Assert.Equal(viaEvent.Guests.First(), guest.Id);
         Assert.True(viaEvent.IsParticipant(guest.Id));
         Assert.Contains(guest.Id, viaEvent.Guests);
+        var _fakeUnitOfWork = new FakeUnitOfWork();
         var guestRepo = new FakeGuestRepository();
-        // var eventRepo = new FakeEventRepository();
-        var eventRepo = new Mock<IViaEventRepository>(); 
-        eventRepo.Setup( x=> x.GetByIdAsync(It.IsAny<ViaEventId>())).Returns(Task.FromResult(viaEvent));
+       var eventRepo = new FakeEventRepository();
+       guestRepo.AddGuest(guest);
+       eventRepo.AddEvent(viaEvent);
+  
         var command = GuestCancelsParticipationCommand.Create(viaEvent.Id.Value.ToString(), guest.Id.Value.ToString());
         
         Assert.True(command.IsSuccess);
+        Assert.Equal(guest.Id, command.Payload.GuestId);
         
-        var handler = new GuestCancelsParticipationHandler(guestRepo, eventRepo.Object, _fakeUnitOfWork);
+        var handler = new GuestCancelsParticipationHandler(guestRepo, eventRepo, _fakeUnitOfWork);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
         var result = await handler.Handle(command.Payload);    
         
