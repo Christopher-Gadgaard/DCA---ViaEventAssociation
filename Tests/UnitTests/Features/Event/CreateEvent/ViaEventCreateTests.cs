@@ -4,7 +4,7 @@ using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace UnitTests.Features.Event.CreateEvent;
 
-public abstract class ViaEventCreationTests
+public abstract class ViaEventCreateTests
 {
     public class S1
     {
