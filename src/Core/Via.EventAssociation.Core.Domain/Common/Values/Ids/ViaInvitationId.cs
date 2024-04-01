@@ -7,6 +7,7 @@ public class ViaInvitationId:ViaId
 {
     public ViaInvitationId(Guid value) : base(value)
     {
+        
     }
     public static OperationResult<ViaInvitationId> Create()
     {
