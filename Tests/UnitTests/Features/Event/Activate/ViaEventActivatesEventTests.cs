@@ -13,7 +13,7 @@ public abstract class ViaEventActivatesEventTests
         {
             // Arrange
             var viaEventId = ViaEventId.Create();
-            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Some Title")
+            var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithTitle("Some Title").WithValidPastDateTimeRange()
                 .Build();
             Assert.Equal(ViaEventStatus.Draft, viaEvent.Status);
             

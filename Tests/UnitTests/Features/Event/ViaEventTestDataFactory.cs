@@ -15,11 +15,7 @@ public class ViaEventTestDataFactory
     private ViaEvent _event;
     private static ITimeProvider _timeProvider;
 
-    public static ViaEventTestDataFactory Init(ViaEventId id, ITimeProvider? timeProvider)
-    {
-       
-        return new ViaEventTestDataFactory(id, timeProvider ?? new SystemTimeProvider());
-    }
+   
 
     public static ViaEventTestDataFactory Init(ViaEventId id)
     {
@@ -31,26 +27,16 @@ public class ViaEventTestDataFactory
         _timeProvider = timeProvider;
         _event = ViaEvent.Create(id).Payload;
     }
-   
 
 
     public ViaEventTestDataFactory WithStatus(ViaEventStatus status)
     {
+        SetDateIfNull();
+
         if (status == ViaEventStatus.Active)
         {
-            if (_event.DateTimeRange is null)
-            {
-                var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
-                var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
-                var dateTimeRangeResult = ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
-                if (dateTimeRangeResult.IsSuccess)
-                {
-                    _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
-                }
-            }
-            
             WithTitle("test title");
-            
+
             _event.UpdateStatus(ViaEventStatus.Ready);
             _event.UpdateStatus(status);
         }
@@ -60,6 +46,19 @@ public class ViaEventTestDataFactory
         }
 
         return this;
+    }
+
+    private void SetDateIfNull()
+    {
+        if (_event.DateTimeRange is not null) return;
+        var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
+        var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
+        var dateTimeRangeResult =
+            ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
+        if (dateTimeRangeResult.IsSuccess)
+        {
+            _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
+        }
     }
 
     public ViaEventTestDataFactory WithTitle(string title)
@@ -79,6 +78,19 @@ public class ViaEventTestDataFactory
         if (descriptionResult.IsSuccess)
         {
             _event.UpdateDescription(descriptionResult.Payload!);
+        }
+
+        return this;
+    }
+    
+    public ViaEventTestDataFactory WithValidPastDateTimeRange()
+    {
+        var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
+        var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
+        var dateTimeRangeResult = ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
+        if (dateTimeRangeResult.IsSuccess)
+        {
+            _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
         }
 
         return this;
@@ -114,6 +126,7 @@ public class ViaEventTestDataFactory
 
     public ViaEventTestDataFactory WithVisibility(ViaEventVisibility visibility)
     {
+        
         if (visibility == ViaEventVisibility.Public)
         {
             _event.MakePublic();
@@ -125,12 +138,12 @@ public class ViaEventTestDataFactory
 
         return this;
     }
+
     public ViaEventTestDataFactory WithGuests(List<ViaGuestId> guestIds)
     {
         foreach (var guestId in guestIds)
         {
-            
-           var result= _event.AddParticipant(guestId);
+            var result = _event.AddParticipant(guestId);
         }
 
         return this;
@@ -138,18 +151,6 @@ public class ViaEventTestDataFactory
 
     public ViaEvent Build()
     {
-        if (_event.DateTimeRange is not null) return _event;
-        
-        var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
-        var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
-        var dateTimeRangeResult = ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
-        if (dateTimeRangeResult.IsSuccess)
-        {
-            _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
-        }
-
         return _event;
     }
-    
-    
 }
