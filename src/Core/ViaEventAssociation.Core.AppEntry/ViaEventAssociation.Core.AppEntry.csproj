@@ -20,4 +20,8 @@
       <Folder Include="Commands\Event\Status\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-preview.2.24128.5" />
+    </ItemGroup>
+
 </Project>
