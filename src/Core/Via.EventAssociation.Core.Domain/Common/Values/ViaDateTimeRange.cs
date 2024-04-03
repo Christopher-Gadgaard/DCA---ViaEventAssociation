@@ -8,16 +8,13 @@ namespace Via.EventAssociation.Core.Domain.Common.Values;
 
 public class ViaDateTimeRange : ValueObject
 {
-    internal DateTime StartValue { get; private init; }
-    internal DateTime EndValue { get; private init; }
-    
-    private ITimeProvider TimeProvider { get; }
+    internal DateTime StartValue { get;}
+    internal DateTime EndValue { get;}
 
-    private ViaDateTimeRange(DateTime startValue, DateTime endValue, ITimeProvider timeProvider)
+    private ViaDateTimeRange(DateTime startValue, DateTime endValue)
     {
         StartValue = startValue;
         EndValue = endValue;
-        TimeProvider = timeProvider;
     }
 
     public static OperationResult<ViaDateTimeRange> Create(DateTime startValue, DateTime endValue, ITimeProvider timeProvider )
@@ -25,7 +22,7 @@ public class ViaDateTimeRange : ValueObject
         var validation = Validate(startValue, endValue, timeProvider);
         if (validation.IsSuccess)
         {
-            return new ViaDateTimeRange(startValue, endValue, timeProvider);
+            return new ViaDateTimeRange(startValue, endValue);
         }
 
         return validation.OperationErrors;
@@ -41,10 +38,8 @@ public class ViaDateTimeRange : ValueObject
         ValidateEndTimeIfNextDay(startValue, endValue, errors);
         ValidateStartTimeIsNotInThePast(startValue, timeProvider, errors);
 
-        return errors.Count != 0 ? OperationResult<ViaDateTimeRange>.Failure(errors) : OperationResult<ViaDateTimeRange>.Success(new ViaDateTimeRange(startValue, endValue, timeProvider));
+        return errors.Count != 0 ? OperationResult<ViaDateTimeRange>.Failure(errors) : OperationResult<ViaDateTimeRange>.Success(new ViaDateTimeRange(startValue, endValue));
     }
-    
-    internal bool IsPast => StartValue < TimeProvider.Now;
 
     private static void ValidateStartBeforeEndTime(DateTime startValue, DateTime endValue, ICollection<OperationError> errors)
     {
@@ -91,10 +86,5 @@ public class ViaDateTimeRange : ValueObject
     {
         yield return StartValue;
         yield return EndValue;
-    }
-
-    public static ViaDateTimeRange Default()
-    {
-        throw new NotImplementedException();
     }
 }

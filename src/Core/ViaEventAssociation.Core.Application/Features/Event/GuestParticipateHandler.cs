@@ -1,4 +1,5 @@
-﻿using Via.EventAssociation.Core.Domain.Aggregates.Event;
+﻿using System.Net.NetworkInformation;
+using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
 using Via.EventAssociation.Core.Domain.Aggregates.Guests;
 using Via.EventAssociation.Core.Domain.Common.UnitOfWork;
@@ -15,12 +16,14 @@ internal class GuestParticipateHandler:ICommandHandler<GuestParticipateCommand>
     private readonly IViaEventRepository _eventRepository;
     private readonly IViaGuestRepository _guestRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITimeProvider _timeProvider;
     
-    internal GuestParticipateHandler(IViaEventRepository eventRepository, IViaGuestRepository guestRepository, IUnitOfWork unitOfWork)
+    internal GuestParticipateHandler(IViaEventRepository eventRepository, IViaGuestRepository guestRepository, IUnitOfWork unitOfWork, ITimeProvider timeProvider)
     {
         _eventRepository = eventRepository;
         _guestRepository = guestRepository;
         _unitOfWork = unitOfWork;
+        _timeProvider = timeProvider;
     }
     
     public async Task<OperationResult> Handle(GuestParticipateCommand command)
@@ -37,7 +40,7 @@ internal class GuestParticipateHandler:ICommandHandler<GuestParticipateCommand>
             return OperationResult.Failure(new List<OperationError>{new(ErrorCode.NotFound, "Guest not found")});
         }
 
-        OperationResult result = viaEvent.AddParticipant(viaGuest.Id);
+        OperationResult result = viaEvent.AddParticipant(viaGuest.Id, _timeProvider);
         if(result.IsFailure)
         {
             return OperationResult.Failure(result.OperationErrors);

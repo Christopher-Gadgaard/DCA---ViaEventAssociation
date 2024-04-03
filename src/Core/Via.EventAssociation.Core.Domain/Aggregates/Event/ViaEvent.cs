@@ -5,6 +5,7 @@ using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Common.Bases;
 using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
+using Via.EventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
 using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
@@ -96,37 +97,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
         return IfReadyRevertToDraft();
     }
-
-    public OperationResult UpdateStatus(ViaEventStatus newStatus)
-    {
-        if (newStatus == ViaEventStatus.Cancelled)
-        {
-            return TryCancelEvent();
-        }
-
-        switch (Status, newStatus)
-        {
-            case (ViaEventStatus.Draft, ViaEventStatus.Ready):
-                return TryReadyEvent();
-
-            case (ViaEventStatus.Draft, ViaEventStatus.Active):
-                var readyResult = TryReadyEvent();
-                return !readyResult.IsSuccess ? readyResult : TryActivateEvent();
-
-            case (ViaEventStatus.Ready, ViaEventStatus.Active):
-                return TryActivateEvent();
-
-            case (ViaEventStatus.Active, ViaEventStatus.Active):
-                return OperationResult.Success();
-
-            default:
-                return OperationResult.Failure(new List<OperationError>
-                {
-                    new(ErrorCode.BadRequest,
-                        $"Transitioning from '{Status}' to '{newStatus}' status is not supported.")
-                });
-        }
-    }
+    
 
     public OperationResult MakePublic()
     {
@@ -156,14 +127,51 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult.Success();
     }
 
-    public OperationResult Ready()
+    public OperationResult Ready(ITimeProvider timeProvider)
     {
-        return TryReadyEvent();
+        if (Status == ViaEventStatus.Cancelled)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "Cancelled events cannot be readied or activated.")
+            });
+        }
+
+        if (!IsEventDataComplete(out var errorMessages,timeProvider))
+        {
+            return OperationResult.Failure(
+                new List<OperationError>(errorMessages.Select(message =>
+                    new OperationError(ErrorCode.BadRequest, message))));
+        }
+
+        Status = ViaEventStatus.Ready;
+        return OperationResult.Success();
     }
 
-    public OperationResult Activate()
+    public OperationResult Activate(ITimeProvider timeProvider)
     {
-        return TryActivateEvent();
+        var readyResult = Ready(timeProvider);
+        
+        if (readyResult.IsFailure)
+        {
+            return readyResult;
+        }
+
+        Status = ViaEventStatus.Active;
+        return OperationResult.Success();
+    }
+    
+    public OperationResult Cancel()
+    {
+        if (Status == ViaEventStatus.Cancelled)
+        {
+            return OperationResult.Failure(new List<OperationError>
+            {
+                new(ErrorCode.BadRequest, "The event is already cancelled.")
+            });
+        }
+        Status = ViaEventStatus.Cancelled;
+        return OperationResult.Success();
     }
 
     public OperationResult SetMaxGuests(ViaMaxGuests maxGuests)
@@ -189,47 +197,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult.Success();
     }
 
-    private OperationResult TryReadyEvent()
-    {
-        if (Status == ViaEventStatus.Cancelled)
-        {
-            return OperationResult.Failure(new List<OperationError>
-            {
-                new(ErrorCode.BadRequest, "Cancelled events cannot be readied or activated.")
-            });
-        }
-
-        if (!IsEventDataComplete(out var errorMessages))
-        {
-            return OperationResult.Failure(
-                new List<OperationError>(errorMessages.Select(message =>
-                    new OperationError(ErrorCode.BadRequest, message))));
-        }
-
-        Status = ViaEventStatus.Ready;
-        return OperationResult.Success();
-    }
-
-    private OperationResult TryActivateEvent()
-    {
-        var readyResult = TryReadyEvent();
-        
-        if (readyResult.IsFailure)
-        {
-            return readyResult;
-        }
-
-        Status = ViaEventStatus.Active;
-        return OperationResult.Success();
-    }
-
-    private OperationResult TryCancelEvent()
-    {
-        Status = ViaEventStatus.Cancelled;
-        return OperationResult.Success();
-    }
-
-    private bool IsEventDataComplete(out List<string> errorMessages)
+    private bool IsEventDataComplete(out List<string> errorMessages, ITimeProvider timeProvider)
     {
         errorMessages = new List<string>();
         if (Title.Value == ViaEventTitle.Default().Value)
@@ -241,7 +209,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         if (DateTimeRange is null)
             errorMessages.Add("The date time range must be set.");
         
-        if (DateTimeRange is not null && DateTimeRange.IsPast)
+        if (DateTimeRange is not null && DateTimeRange.StartValue < timeProvider.Now) 
             errorMessages.Add("The start time cannot be in the past.");
         
         if (MaxGuests is null)
@@ -268,24 +236,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult.Success();
     }
 
-    private static DateTime AdjustStartTimeBasedOnBusinessRules(DateTime currentTime)
-    {
-        var targetStartTime = currentTime;
-        if (currentTime.Hour < 8)
-        {
-            // Set to today at 08:00 if before 08:00 AM
-            targetStartTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 8, 0, 0);
-        }
-        else if (currentTime.Hour >= 1 && currentTime.AddSeconds(30).Day > currentTime.Day)
-        {
-            // Set to next day at 08:00 if after 01:00 AM
-            targetStartTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day).AddDays(1).AddHours(8);
-        }
-
-        return targetStartTime;
-    }
-
-    public OperationResult AddParticipant(ViaGuestId guestId)
+    public OperationResult AddParticipant(ViaGuestId guestId, ITimeProvider timeProvider)
     {
         if (Status != ViaEventStatus.Active)
         {
@@ -305,7 +256,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
                 {new OperationError(ErrorCode.Conflict, "The event is full.")});
         }
 
-        if (DateTimeRange.IsPast)
+        if (DateTimeRange.StartValue < timeProvider.Now)
         {
             return OperationResult.Failure(new List<OperationError>
                 {new OperationError(ErrorCode.BadRequest, "Cannot add participants to past events.")});
@@ -321,7 +272,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         return OperationResult.Success();
     }
 
-    public OperationResult RemoveParticipant(ViaGuestId guestId)
+    public OperationResult RemoveParticipant(ViaGuestId guestId, ITimeProvider timeProvider)
     {
         if (!IsParticipant(guestId))
         {
@@ -331,7 +282,7 @@ public class ViaEvent : AggregateRoot<ViaEventId>
             });
         }
 
-        if (DateTimeRange.IsPast)
+        if (DateTimeRange.StartValue < timeProvider.Now)
         {
             return OperationResult.Failure(new List<OperationError>
             {

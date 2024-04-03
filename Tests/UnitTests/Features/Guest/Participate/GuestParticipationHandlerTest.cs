@@ -1,5 +1,6 @@
 ﻿using Moq;
 using UnitTests.Common.Factories;
+using UnitTests.Common.Utilities;
 using UnitTests.Fakes;
 using UnitTests.Fakes.Repositories;
 using UnitTests.Features.Event;
@@ -22,15 +23,16 @@ public class GuestParticipationHandlerTest
         var eventId = ViaEventId.Create().Payload;
         var viaEvent = ViaEventTestDataFactory.Init(eventId).WithStatus(ViaEventStatus.Active)
             .WithVisibility(ViaEventVisibility.Public).Build();
-
+        var timeProvider = new FakeTimeProvider(viaEvent.DateTimeRange!.StartValue.AddDays(-1));
         var guest = ViaGuestTestFactory.CreateValidViaGuest();
         var guestRepo = new FakeGuestRepository();
         guestRepo.AddGuest(guest);
         var eventRepo = new FakeEventRepository();
         eventRepo.AddEvent(viaEvent);
+        
         var command = GuestParticipateCommand.Create(viaEvent.Id.Value, guest.Id.Value);
         ICommandHandler<GuestParticipateCommand> handler =
-            new GuestParticipateHandler(eventRepo, guestRepo, _unitOfWork);
+            new GuestParticipateHandler(eventRepo, guestRepo, _unitOfWork, timeProvider);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
         Assert.NotNull(command.Payload);
@@ -44,6 +46,7 @@ public class GuestParticipationHandlerTest
     [Fact]
     public async Task GivenNothing_WhenParticipatingToEvent_Fail()
     {
+        var timeProvider = new FakeTimeProvider(DateTime.Now);
         var eventId = ViaEventId.Create().Payload;
         var viaEvent = ViaEventTestDataFactory.Init(eventId)
             .WithVisibility(ViaEventVisibility.Public).Build();
@@ -53,7 +56,7 @@ public class GuestParticipationHandlerTest
         var eventRepo = new FakeEventRepository();
         var command = GuestParticipateCommand.Create(viaEvent.Id.Value, guest.Id.Value);
         ICommandHandler<GuestParticipateCommand> handler =
-            new GuestParticipateHandler(eventRepo, guestRepo, _unitOfWork);
+            new GuestParticipateHandler(eventRepo, guestRepo, _unitOfWork, timeProvider);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
     
         Assert.NotNull(command.Payload);

@@ -1,5 +1,6 @@
 ﻿using Moq;
 using UnitTests.Common.Factories;
+using UnitTests.Common.Utilities;
 using UnitTests.Features.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
@@ -19,22 +20,22 @@ public class GuestCancelsEventParticipationTest
     [Fact]
     public void Guest_Removes_Participation_From_Public_Event_Successfully()
     {
-      
+        // Arrange
         var eventId= ViaEventId.Create().Payload;
-        var viaEvent = ViaEventTestDataFactory.Init(eventId)
+        var viaEvent = ViaEventTestDataFactory.Init(eventId) 
             .WithStatus(ViaEventStatus.Active)
             .WithVisibility(ViaEventVisibility.Public)
             .Build();
-
+        var timeProvider = new FakeTimeProvider(viaEvent.DateTimeRange!.StartValue.AddDays(-2));
         var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
 
-        viaEvent.AddParticipant(viaGuest.Id);
+        viaEvent.AddParticipant(viaGuest.Id, timeProvider);
 
         // Pre-Assertion
         Assert.True(viaEvent.IsParticipant(viaGuest.Id));
 
         // Act
-        var result = viaEvent.RemoveParticipant(viaGuest.Id);
+        var result = viaEvent.RemoveParticipant(viaGuest.Id, timeProvider);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -44,6 +45,7 @@ public class GuestCancelsEventParticipationTest
     public void Guest_Removal_Does_Nothing_When_Not_A_Participant()
     {
         // Arrange
+        var timeProvider = new FakeTimeProvider(DateTime.Now);
         var eventId= ViaEventId.Create().Payload;
         var viaEvent = ViaEventTestDataFactory.Init(eventId)
             .WithStatus(ViaEventStatus.Active)
@@ -54,7 +56,7 @@ public class GuestCancelsEventParticipationTest
         var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
 
         // Act
-        var result = viaEvent.RemoveParticipant(viaGuest.Id);
+        var result = viaEvent.RemoveParticipant(viaGuest.Id, timeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);

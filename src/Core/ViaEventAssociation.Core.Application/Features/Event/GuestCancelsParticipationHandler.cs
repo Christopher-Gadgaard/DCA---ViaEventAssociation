@@ -16,13 +16,15 @@ internal class GuestCancelsParticipationHandler : ICommandHandler<GuestCancelsPa
     private readonly IViaGuestRepository _guestRepository;
     private readonly IViaEventRepository _eventRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITimeProvider _timeProvider;
 
     internal GuestCancelsParticipationHandler(IViaGuestRepository guestRepository, IViaEventRepository eventRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, ITimeProvider timeProvider)
     {
         _guestRepository = guestRepository;
         _eventRepository = eventRepository;
         _unitOfWork = unitOfWork;
+        _timeProvider = timeProvider;
     }
 
     public async Task<OperationResult> Handle(GuestCancelsParticipationCommand command)
@@ -39,7 +41,7 @@ internal class GuestCancelsParticipationHandler : ICommandHandler<GuestCancelsPa
             return OperationResult.Failure(new List<OperationError> { new(ErrorCode.NotFound, "Guest not found") });
         }
 
-        OperationResult result = viaEvent.RemoveParticipant(viaGuest.Id);
+        OperationResult result = viaEvent.RemoveParticipant(viaGuest.Id, _timeProvider);
       
         if (result.IsSuccess)
         {

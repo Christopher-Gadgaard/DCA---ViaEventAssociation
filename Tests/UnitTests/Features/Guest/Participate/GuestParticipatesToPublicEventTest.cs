@@ -18,7 +18,8 @@ public class GuestParticipatesToPublicEventTest
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithStatus(ViaEventStatus.Active)
             .WithVisibility(ViaEventVisibility.Public).Build();
-
+        var timeProvider = new FakeTimeProvider(viaEvent.DateTimeRange!.StartValue.AddDays(-1));
+        
         Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
         Assert.Equal(ViaEventVisibility.Public, viaEvent.Visibility);
 
@@ -27,7 +28,7 @@ public class GuestParticipatesToPublicEventTest
         Assert.NotNull(viaGuest.Id);
 
         // Act
-        var result = viaEvent.AddParticipant(viaGuest.Id);
+        var result = viaEvent.AddParticipant(viaGuest.Id, timeProvider);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -37,6 +38,7 @@ public class GuestParticipatesToPublicEventTest
     [Fact]
     public void GuestParticipationFailsInDraftState()
     {
+        var timeProvider = new FakeTimeProvider(DateTime.Now);
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithVisibility(ViaEventVisibility.Public)
             .WithStatus(ViaEventStatus.Draft).Build();
@@ -48,7 +50,7 @@ public class GuestParticipatesToPublicEventTest
         Assert.NotNull(viaGuest.Id);
 
         // Act
-        var result = viaEvent.AddParticipant(viaGuest.Id);
+        var result = viaEvent.AddParticipant(viaGuest.Id, timeProvider);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -58,6 +60,7 @@ public class GuestParticipatesToPublicEventTest
     [Fact]
     public void GuestParticipationFailsWhenPrivateEvent()
     {
+        var timeProvider = new FakeTimeProvider(DateTime.Now);
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithVisibility(ViaEventVisibility.Private)
             .WithStatus(ViaEventStatus.Active).Build();
@@ -69,7 +72,7 @@ public class GuestParticipatesToPublicEventTest
         Assert.NotNull(viaGuest.Id);
 
         // Act
-        var result = viaEvent.AddParticipant(viaGuest.Id);
+        var result = viaEvent.AddParticipant(viaGuest.Id, timeProvider);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -82,7 +85,8 @@ public class GuestParticipatesToPublicEventTest
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithVisibility(ViaEventVisibility.Public)
             .WithStatus(ViaEventStatus.Active).Build();
-
+        var timeProvider = new FakeTimeProvider(viaEvent.DateTimeRange!.StartValue.AddDays(-1));
+        
         Assert.Equal(ViaEventStatus.Active, viaEvent.Status);
         Assert.Equal(ViaEventVisibility.Public, viaEvent.Visibility);
         var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
@@ -90,11 +94,11 @@ public class GuestParticipatesToPublicEventTest
         Assert.NotNull(viaGuest.Id);
 
         // Act
-        var result = viaEvent.AddParticipant(viaGuest.Id);
+        var result = viaEvent.AddParticipant(viaGuest.Id, timeProvider);
         Assert.True(result.IsSuccess);
         Assert.True(viaEvent.IsParticipant(viaGuest.Id));
         
-        var addAgain= viaEvent.AddParticipant(viaGuest.Id);
+        var addAgain= viaEvent.AddParticipant(viaGuest.Id, timeProvider);
         // Assert
      
         Assert.True(addAgain.IsFailure);
@@ -107,6 +111,7 @@ public class GuestParticipatesToPublicEventTest
     public void Guest_Participation_Fails_When_Event_Is_Canceled()
     {
         // Arrange
+        var timeProvider = new FakeTimeProvider(DateTime.Now);
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
             .WithStatus(ViaEventStatus.Cancelled)
@@ -116,7 +121,7 @@ public class GuestParticipatesToPublicEventTest
         var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
 
         // Act
-        var result = viaEvent.AddParticipant(viaGuest.Id);
+        var result = viaEvent.AddParticipant(viaGuest.Id, timeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -126,6 +131,7 @@ public class GuestParticipatesToPublicEventTest
     [Fact]
     public void Guest_Participation_Fails_When_Event_Is_Full()
     {
+        var timeProvider = new FakeTimeProvider(DateTime.Now);
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload).WithStatus(ViaEventStatus.Active) .WithVisibility(ViaEventVisibility.Public)
             .WithMaxGuests(5).WithGuests( new List<ViaGuestId>(){ViaGuestId.Create().Payload, ViaGuestId.Create().Payload, ViaGuestId.Create().Payload, ViaGuestId.Create().Payload, ViaGuestId.Create().Payload})
@@ -139,7 +145,7 @@ public class GuestParticipatesToPublicEventTest
         var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
 
         // Act
-        var result = viaEvent.AddParticipant(viaGuest.Id);
+        var result = viaEvent.AddParticipant(viaGuest.Id, timeProvider);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -149,20 +155,17 @@ public class GuestParticipatesToPublicEventTest
     }
 
     [Fact]
-    public void Guest_Participation_Fails_When_Event_Start_Time_Is_In_The_Past() //TODO: fix this test
+    public void Guest_Participation_Fails_When_Event_Start_Time_Is_In_The_Past()
     {
-        var startTime = new DateTime(2020, 1, 2, 10, 0, 0);
-        var endTime = new DateTime(2020, 1, 2, 16, 0, 0);
-        FakeTimeProvider fakeTimeProvider = new(new DateTime(2020, 1, 3, 10, 0, 0));
-        
-        var dateTimeRange = ViaDateTimeRange.Create(startTime,endTime,fakeTimeProvider);
         
         // Arrange
-        var pastStartTime = DateTime.UtcNow.AddDays(-1);
-        var pastEndTime = DateTime.UtcNow.AddHours(-23);
+        var dates = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
+        var fakeTimeProvider = new FakeTimeProvider( dates.start.AddDays(-1));
+        var dateTimeRangeResult = ViaDateTimeRange.Create(dates.start, dates.end, fakeTimeProvider);
+        var timeProvider = new FakeTimeProvider(dates.start.AddDays(1));
         var viaEventId = ViaEventId.Create();
         var viaEvent = ViaEventTestDataFactory.Init(viaEventId.Payload)
-            .WithDateTimeRange(dateTimeRange.Payload)
+            .WithDateTimeRange(dateTimeRangeResult.Payload)
             .WithStatus(ViaEventStatus.Active)
             .WithVisibility(ViaEventVisibility.Public)
             .Build();
@@ -170,7 +173,7 @@ public class GuestParticipatesToPublicEventTest
         var viaGuest = ViaGuestTestFactory.CreateValidViaGuest();
 
         // Act
-        var result = viaEvent.AddParticipant(viaGuest.Id);
+        var result = viaEvent.AddParticipant(viaGuest.Id,timeProvider);
 
         // Assert
         Assert.True(result.IsFailure);

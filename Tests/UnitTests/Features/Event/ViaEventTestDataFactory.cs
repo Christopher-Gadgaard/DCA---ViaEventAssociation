@@ -14,36 +14,48 @@ namespace UnitTests.Features.Event;
 public class ViaEventTestDataFactory
 {
     private ViaEvent _event;
-    private static ITimeProvider _timeProvider;
-
+    private ITimeProvider timeProvider;
     public static ViaEventTestDataFactory Init(ViaEventId id)
     {
-        return new ViaEventTestDataFactory(id, new SystemTimeProvider());
+        
+        return new ViaEventTestDataFactory(id);
     }
 
-    private ViaEventTestDataFactory(ViaEventId id, ITimeProvider timeProvider)
+    private ViaEventTestDataFactory(ViaEventId id)
     {
-        _timeProvider = timeProvider;
+        var dates = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
+        timeProvider = new FakeTimeProvider(dates.start.AddDays(-1));
         _event = ViaEvent.Create(id).Payload;
     }
 
+    public ViaEventTestDataFactory WithFakeTimeProvider(ITimeProvider fakeTimeProvider)
+    {
+        timeProvider = fakeTimeProvider;
+        return this;
+    }
 
     public ViaEventTestDataFactory WithStatus(ViaEventStatus status)
     {
         SetDateIfNull();
-
         if (status == ViaEventStatus.Active)
         {
             WithTitle("test title");
-
-            _event.UpdateStatus(ViaEventStatus.Ready);
-            _event.UpdateStatus(status);
+            _event.Ready(timeProvider);
+            _event.Activate(timeProvider);
         }
-        else
+        else if (status == ViaEventStatus.Ready)
         {
-            _event.UpdateStatus(status);
+            WithTitle("test title");
+            _event.Ready(timeProvider);
         }
-
+        else if (status == ViaEventStatus.Draft)
+        {
+            WithTitle("test title");
+        }
+        else if (status == ViaEventStatus.Cancelled)
+        {
+            _event.Cancel();
+        }
         return this;
     }
 
@@ -52,6 +64,7 @@ public class ViaEventTestDataFactory
         if (_event.DateTimeRange is not null) return;
         var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
         var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
+        WithFakeTimeProvider(fakeTimeProvider);
         var dateTimeRangeResult =
             ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
         if (dateTimeRangeResult.IsSuccess)
@@ -87,17 +100,6 @@ public class ViaEventTestDataFactory
         var validDateRange = ViaDateTimeRangeTestDataFactory.CreateValidDateRange();
         var fakeTimeProvider = new FakeTimeProvider(validDateRange.start.AddDays(-1));
         var dateTimeRangeResult = ViaDateTimeRange.Create(validDateRange.start, validDateRange.end, fakeTimeProvider);
-        if (dateTimeRangeResult.IsSuccess)
-        {
-            _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
-        }
-
-        return this;
-    }
-
-    public ViaEventTestDataFactory WithDateTimeRange(DateTime start, DateTime end)
-    {
-        var dateTimeRangeResult = ViaDateTimeRange.Create(start, end, _timeProvider);
         if (dateTimeRangeResult.IsSuccess)
         {
             _event.UpdateDateTimeRange(dateTimeRangeResult.Payload!);
@@ -142,7 +144,7 @@ public class ViaEventTestDataFactory
     {
         foreach (var guestId in guestIds)
         {
-            var result = _event.AddParticipant(guestId);
+            var result = _event.AddParticipant(guestId, timeProvider);
         }
 
         return this;
