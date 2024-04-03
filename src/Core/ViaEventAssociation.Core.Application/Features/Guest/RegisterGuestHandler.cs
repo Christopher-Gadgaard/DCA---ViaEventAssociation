@@ -18,7 +18,7 @@ internal class RegisterGuestHandler: ICommandHandler<RegisterGuestCommand>
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<OperationResult> Handle(RegisterGuestCommand command)
+    public async Task<OperationResult> HandleAsync(RegisterGuestCommand command)
     {
            await _guestRepository.AddAsync(command.Guest);
           

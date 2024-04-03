@@ -17,7 +17,7 @@ internal class ViaEventCreateHandler : ICommandHandler<ViaEventCreateCommand>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<OperationResult> Handle(ViaEventCreateCommand command)
+    public async Task<OperationResult> HandleAsync(ViaEventCreateCommand command)
     {
         var result = ViaEvent.Create(command.Id);
 

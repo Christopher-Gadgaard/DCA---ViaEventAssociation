@@ -14,7 +14,7 @@ public class ViaEventMakePublicHandler : ICommandHandler<ViaEventMakePublicComma
     internal ViaEventMakePublicHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
-    public async Task<OperationResult> Handle(ViaEventMakePublicCommand command)
+    public async Task<OperationResult> HandleAsync(ViaEventMakePublicCommand command)
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
         var result = viaEvent.MakePublic();

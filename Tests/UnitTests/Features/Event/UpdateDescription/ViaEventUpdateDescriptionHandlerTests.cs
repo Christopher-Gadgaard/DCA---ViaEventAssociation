@@ -24,7 +24,7 @@ public class ViaEventUpdateDescriptionHandlerTests
         var handler = new ViaEventUpdateDescriptionHandler(eventRepository, unitOfWork);
 
         // Act
-        var result = await handler.Handle(command);
+        var result = await handler.HandleAsync(command);
 
         // Assert
         Assert.True(result.IsSuccess);

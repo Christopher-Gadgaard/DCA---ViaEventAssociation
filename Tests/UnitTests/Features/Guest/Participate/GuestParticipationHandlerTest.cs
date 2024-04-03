@@ -39,7 +39,7 @@ public class GuestParticipationHandlerTest
         Assert.Equal(viaEvent.Id.Value, command.Payload.EventId.Value);
         Assert.Equal(guest.Id, command.Payload.GuestId);
 
-    var result = await handler.Handle(command.Payload);
+    var result = await handler.HandleAsync(command.Payload);
     Assert.True(result.IsSuccess);
     }
     
@@ -63,7 +63,7 @@ public class GuestParticipationHandlerTest
         Assert.Equal(viaEvent.Id.Value, command.Payload.EventId.Value);
         Assert.Equal(guest.Id, command.Payload.GuestId);
     
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
         Assert.True(result.IsFailure);
     }
 }

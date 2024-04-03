@@ -24,7 +24,7 @@ public class ViaEventSetMaxGuestsHandlerTests
         var handler = new ViaEventSetMaxGuestsHandler(eventRepository, unitOfWork);
 
         // Act
-        var result = await handler.Handle(command);
+        var result = await handler.HandleAsync(command);
 
         // Assert
         Assert.True(result.IsSuccess);

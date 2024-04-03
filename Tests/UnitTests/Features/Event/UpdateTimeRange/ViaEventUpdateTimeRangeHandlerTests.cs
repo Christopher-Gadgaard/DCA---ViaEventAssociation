@@ -27,7 +27,7 @@ public class ViaEventUpdateTimeRangeHandlerTests
         var handler = new ViaEventUpdateTimeRangeHandler(eventRepository, unitOfWork);
 
         // Act
-        var result = await handler.Handle(command);
+        var result = await handler.HandleAsync(command);
 
         // Assert
         Assert.True(result.IsSuccess);

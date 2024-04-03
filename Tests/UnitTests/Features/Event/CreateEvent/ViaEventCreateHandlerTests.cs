@@ -19,7 +19,7 @@ public class ViaEventCreateHandlerTests
         var handler = new ViaEventCreateHandler(eventRepository, unitOfWork);
 
         // Act
-        var result = await handler.Handle(command);
+        var result = await handler.HandleAsync(command);
 
         // Assert
         Assert.True(result.IsSuccess);

@@ -37,7 +37,7 @@ public class GuestAcceptsInvitationHandlerTest
 
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
 
         Assert.True(result.IsSuccess);
     }
@@ -64,7 +64,7 @@ public class GuestAcceptsInvitationHandlerTest
 
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
 
         Assert.False(result.IsSuccess);
     }
@@ -95,7 +95,7 @@ public class GuestAcceptsInvitationHandlerTest
 
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
 
         Assert.False(result.IsSuccess);
     }

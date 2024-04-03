@@ -14,7 +14,7 @@ public class ViaEventUpdateTimeRangeHandler : ICommandHandler<ViaEventUpdateTime
     internal ViaEventUpdateTimeRangeHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
-    public async Task<OperationResult> Handle(ViaEventUpdateTimeRangeCommand command)
+    public async Task<OperationResult> HandleAsync(ViaEventUpdateTimeRangeCommand command)
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
         var result = viaEvent.UpdateDateTimeRange(command.DateTimeRange);

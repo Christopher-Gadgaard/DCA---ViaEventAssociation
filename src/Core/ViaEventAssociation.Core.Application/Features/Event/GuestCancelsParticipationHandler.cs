@@ -27,7 +27,7 @@ internal class GuestCancelsParticipationHandler : ICommandHandler<GuestCancelsPa
         _timeProvider = timeProvider;
     }
 
-    public async Task<OperationResult> Handle(GuestCancelsParticipationCommand command)
+    public async Task<OperationResult> HandleAsync(GuestCancelsParticipationCommand command)
     {
         ViaEvent? viaEvent = await _eventRepository.GetByIdAsync(command.EventId);
         if (viaEvent == null)

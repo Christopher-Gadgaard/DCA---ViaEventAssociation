@@ -97,7 +97,6 @@ public class ViaEvent : AggregateRoot<ViaEventId>
 
         return IfReadyRevertToDraft();
     }
-    
 
     public OperationResult MakePublic()
     {

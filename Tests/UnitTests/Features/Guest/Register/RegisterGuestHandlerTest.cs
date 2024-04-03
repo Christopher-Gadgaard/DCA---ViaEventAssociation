@@ -27,7 +27,7 @@ public class RegisterGuestHandlerTest
         guestRepository.AddGuest(command.Guest);
         ICommandHandler<RegisterGuestCommand> handler = new RegisterGuestHandler(guestRepository, unitOfWork);
         //Act
-        var result = await handler.Handle(command);
+        var result = await handler.HandleAsync(command);
         //Assert
         Assert.True(result.IsSuccess);
         Assert.Equal("308826@via.dk", guestRepository.GetByIdAsync(command.Guest.Id).Result?.ViaEmail.Value);

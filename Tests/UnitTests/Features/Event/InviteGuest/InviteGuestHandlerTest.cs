@@ -31,7 +31,7 @@ public class InviteGuestHandlerTest
         var handler = new InviteGuestHandler(eventRepository, guestRepository, _fakeUnitOfWork, invitationRepository);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
 
         Assert.True(result.IsSuccess);
     }
@@ -57,7 +57,7 @@ public class InviteGuestHandlerTest
         var handler = new InviteGuestHandler(eventRepository, guestRepository, _fakeUnitOfWork, invitationRepository);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
 
         Assert.False(result.IsSuccess);
     }
@@ -83,7 +83,7 @@ public class InviteGuestHandlerTest
         var handler = new InviteGuestHandler(eventRepository, guestRepository, _fakeUnitOfWork, invitationRepository);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
 
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
 
         Assert.False(result.IsSuccess);
     }

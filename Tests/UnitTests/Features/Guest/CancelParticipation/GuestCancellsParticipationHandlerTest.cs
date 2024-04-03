@@ -42,7 +42,7 @@ public class GuestCancelsParticipationHandlerTest
 
         var handler = new GuestCancelsParticipationHandler(guestRepo, eventRepo, fakeUnitOfWork, timeProvider);
         if (handler == null) throw new ArgumentNullException(nameof(handler));
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
 
         Assert.True(result.IsSuccess);
     }

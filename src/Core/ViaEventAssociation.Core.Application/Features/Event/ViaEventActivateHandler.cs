@@ -15,7 +15,7 @@ public class ViaEventActivateHandler : ICommandHandler<ViaEventActivateCommand>
     
     internal ViaEventActivateHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork, ITimeProvider timeProvider) =>
         (_eventRepository, _unitOfWork, _timeProvider) = (eventRepository, unitOfWork, timeProvider);
-    public async Task<OperationResult> Handle(ViaEventActivateCommand command)
+    public async Task<OperationResult> HandleAsync(ViaEventActivateCommand command)
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
         var result = viaEvent.Activate(_timeProvider);

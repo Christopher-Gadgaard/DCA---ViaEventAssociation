@@ -28,7 +28,7 @@ internal class GuestAcceptsInvitationHandler : ICommandHandler<GuestAcceptsInvit
     }
 
 
-    public async Task<OperationResult> Handle(GuestAcceptsInvitationCommand command)
+    public async Task<OperationResult> HandleAsync(GuestAcceptsInvitationCommand command)
     {
         ViaEvent? viaEvent = await _eventRepository.GetByIdAsync(command.EventId);
         if (viaEvent == null)

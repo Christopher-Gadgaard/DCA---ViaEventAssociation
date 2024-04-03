@@ -35,7 +35,7 @@ public class GuestDeclinesInvitationHandlerTest
         
         var handler = new GuestDeclinesInvitationHandler(eventRepository, guestRepository, unitOfWork, invitationRepository);
         
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
         Assert.True(result.IsSuccess);
        Assert.True(invitation.Status==ViaInvitationStatus.Rejected);
        Assert.Contains(viaEvent.Invitations, x => x.Id == invitation.Id);
@@ -67,7 +67,7 @@ public class GuestDeclinesInvitationHandlerTest
         var handler =
             new GuestDeclinesInvitationHandler(eventRepository, guestRepository, unitOfWork, invitationRepository);
 
-        var result = await handler.Handle(command.Payload);
+        var result = await handler.HandleAsync(command.Payload);
         Assert.False(result.IsSuccess);
     }
     

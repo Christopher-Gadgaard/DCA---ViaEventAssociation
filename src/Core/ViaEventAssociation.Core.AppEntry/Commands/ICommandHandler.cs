@@ -3,7 +3,7 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.AppEntry.Commands;
 
-public interface ICommandHandler<TCommand>
+public interface ICommandHandler<in TCommand>
 {
-     Task<OperationResult> Handle(TCommand command);
+     Task<OperationResult> HandleAsync(TCommand command);
 }

@@ -14,7 +14,7 @@ public class ViaEventMakePrivateHandler : ICommandHandler<ViaEventMakePrivateCom
     internal ViaEventMakePrivateHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
-    public async Task<OperationResult> Handle(ViaEventMakePrivateCommand command)
+    public async Task<OperationResult> HandleAsync(ViaEventMakePrivateCommand command)
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
         var result = viaEvent.MakePrivate();

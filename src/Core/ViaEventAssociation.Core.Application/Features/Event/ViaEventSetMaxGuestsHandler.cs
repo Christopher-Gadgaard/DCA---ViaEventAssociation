@@ -14,7 +14,7 @@ public class ViaEventSetMaxGuestsHandler : ICommandHandler<ViaEventSetMaxGuestsC
     internal ViaEventSetMaxGuestsHandler(IViaEventRepository eventRepository, IUnitOfWork unitOfWork) =>
         (_eventRepository, _unitOfWork) = (eventRepository, unitOfWork);
 
-    public async Task<OperationResult> Handle(ViaEventSetMaxGuestsCommand command)
+    public async Task<OperationResult> HandleAsync(ViaEventSetMaxGuestsCommand command)
     {
         var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
         var result = viaEvent.SetMaxGuests(command.MaxGuests);

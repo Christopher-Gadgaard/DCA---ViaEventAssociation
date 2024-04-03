@@ -26,7 +26,7 @@ internal class GuestParticipateHandler:ICommandHandler<GuestParticipateCommand>
         _timeProvider = timeProvider;
     }
     
-    public async Task<OperationResult> Handle(GuestParticipateCommand command)
+    public async Task<OperationResult> HandleAsync(GuestParticipateCommand command)
     {
         ViaEvent? viaEvent= await _eventRepository.GetByIdAsync(command.EventId);
         if(viaEvent == null)
