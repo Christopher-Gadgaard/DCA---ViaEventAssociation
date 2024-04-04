@@ -20,4 +20,18 @@ public class ViaEventActivateCommandTests
         Assert.NotEmpty(command.Id.ToString()!);
         Assert.Equal(id, command.Id.Value.ToString());
     }
+    
+    [Fact]
+    public void ViaEventActivateCommand_GivenInvalidId_Failure()
+    {
+        // Arrange
+        var id = string.Empty;
+        
+        // Act
+        var result = ViaEventActivateCommand.Create(id);
+        
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Equal("Invalid id", result.OperationErrors.First().Message);
+    }
 }

@@ -5,7 +5,13 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationError;
         public List<OperationError> OperationErrors { get; protected set; } = new();
         public bool IsSuccess => OperationErrors.Count == 0;
         public bool IsFailure => !IsSuccess;
-
+        public float ExecutionTimeInMilliseconds { get; protected set; } = -1;
+        
+        public void AppendExecutionTime(float executionTimeInMilliseconds)
+        {
+            ExecutionTimeInMilliseconds = executionTimeInMilliseconds;
+        }
+        
         // Factory method for success without payload
         public static OperationResult Success() => new OperationResultWithoutPayload();
 

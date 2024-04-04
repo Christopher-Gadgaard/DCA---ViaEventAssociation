@@ -8,11 +8,10 @@ public class ViaEventCreateCommandTests
     [Fact]
     public void ViaEventCreationCommand_GivenNothing_Success()
     {
-        // Arrange
+        // Act
         var result = ViaEventCreateCommand.Create();
         var command = result.Payload;
         
-        // Act
         Assert.True(result.IsSuccess);
         Assert.NotNull(command.Id);
         Assert.NotNull(command.Id.ToString());
@@ -24,15 +23,31 @@ public class ViaEventCreateCommandTests
     {
         // Arrange
         var id = Guid.NewGuid().ToString();
+        
+        // Act
         var result = ViaEventCreateCommand.Create(id);
         var command = result.Payload;
         
-        // Act
+        // Assert
         Assert.True(result.IsSuccess);
         
         Assert.NotNull(command.Id);
         Assert.NotNull(command.Id.ToString());
         Assert.NotEmpty(command.Id.ToString()!);
         Assert.Equal(id, command.Id.Value.ToString());
+    }
+    
+    [Fact]
+    public void ViaEventCreationCommand_GivenBadId_Failure()
+    {
+        // Arrange
+        var id = string.Empty;
+        
+        // Act
+        var result = ViaEventCreateCommand.Create(id);
+        
+        // Arrange
+        Assert.True(result.IsFailure);
+        Assert.Equal("Invalid id", result.OperationErrors.First().Message);
     }
 }

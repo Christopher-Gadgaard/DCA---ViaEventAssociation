@@ -22,7 +22,7 @@ public class ViaEventActivateHandlerTests
         var timeProvider = new FakeTimeProvider(viaEvent.DateTimeRange!.StartValue.AddDays(-1));
         
         var eventRepository = new FakeEventRepository();
-        eventRepository.AddEvent(ViaEventTestDataFactory.Init(command.Id).WithValidPastDateTimeRange().WithTitle("TEST TITLE").Build());
+        eventRepository.AddEvent(viaEvent);
 
         var unitOfWork = new FakeUnitOfWork();
 
@@ -38,5 +38,32 @@ public class ViaEventActivateHandlerTests
         var viaEventTest = eventRepository.Events.First();
         Assert.Equal(command.Id, viaEventTest.Id);
         Assert.Equal(ViaEventStatus.Active, viaEventTest.Status);
+    }
+    
+    [Fact]
+    public async Task ViaEventActivateHandler_GivenValidCommand_Failure_DueToPastDate()
+    {
+        // Arrange
+        var id = Guid.NewGuid().ToString();
+
+        var command = ViaEventActivateCommand.Create(id).Payload;
+        
+        var viaEvent = ViaEventTestDataFactory.Init(command.Id).WithValidPastDateTimeRange().WithTitle("TEST TITLE")
+            .Build();
+        var timeProvider = new FakeTimeProvider(viaEvent.DateTimeRange!.StartValue.AddDays(1));
+        
+        var eventRepository = new FakeEventRepository();
+        eventRepository.AddEvent(viaEvent);
+
+        var unitOfWork = new FakeUnitOfWork();
+
+        var handler = new ViaEventActivateHandler(eventRepository, unitOfWork, timeProvider);
+
+        // Act
+        var result = await handler.HandleAsync(command);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Equal("The start time cannot be in the past.", result.OperationErrors.First().Message);
     }
 }
