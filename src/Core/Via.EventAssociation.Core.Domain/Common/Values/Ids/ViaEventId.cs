@@ -8,7 +8,8 @@ public class ViaEventId : ViaId
     private ViaEventId(Guid value) : base(value)
     {
     }
-
+    public static ViaEventId FromGuid(Guid value) => new ViaEventId(value);
+    // private ViaEventId(Guid guid)=>Value=guid;
     public static OperationResult<ViaEventId> Create()
     {
         var id = Guid.NewGuid();

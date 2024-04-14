@@ -9,8 +9,9 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Guests.Values;
 public class ViaName : ValueObject
 {
     
-    public string Value { get; private init; }
+    public string Value { get; }
     
+    private ViaName(){}
     private ViaName(string value)
     {
         Value = value;

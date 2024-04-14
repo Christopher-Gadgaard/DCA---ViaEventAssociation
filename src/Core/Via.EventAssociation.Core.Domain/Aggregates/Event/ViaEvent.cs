@@ -49,9 +49,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         _invitationRequests = new List<ViaInvitationRequest>();
     }
     
-    public ViaEvent()
+    private ViaEvent()
     {}
-
+  
     public static OperationResult<ViaEvent> Create(ViaEventId id)
     {
         var titleResult = ViaEventTitle.Default();

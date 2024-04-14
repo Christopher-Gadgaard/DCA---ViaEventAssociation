@@ -5,13 +5,15 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Guests.Values;
 
 public class ViaGuestName : ValueObject
 {
-    private ViaName _name { get; }
-    private ViaName _lastName { get; }
+    public ViaName FirstName { get; private set; }
+    public ViaName LastName { get; private set;}
+    
+    private ViaGuestName(){}
 
     private ViaGuestName(ViaName guestFirstName, ViaName guestLastName)
     {
-        _name = guestFirstName;
-        _lastName = guestLastName;
+        FirstName = guestFirstName;
+        LastName = guestLastName;
     }
 
     public static OperationResult<ViaGuestName> Create(string guestFirstName, string guestLastName)
@@ -34,7 +36,7 @@ public class ViaGuestName : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return _name;
-        yield return _lastName;
+        yield return FirstName;
+        yield return LastName;
     }
 }

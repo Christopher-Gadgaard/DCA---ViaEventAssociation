@@ -1,4 +1,5 @@
-﻿using EfcDmPersistence.ViaEventPersistence;
+﻿using EfcDmPersistence.GuestPersistence;
+using EfcDmPersistence.ViaEventPersistence;
 using Microsoft.EntityFrameworkCore;
 using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Guests;
@@ -14,5 +15,6 @@ public class ViaDbContext(DbContextOptions options) : DbContext(options)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ViaDbContext).Assembly);
         modelBuilder.ApplyConfiguration(new ViaEventEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new ViaGuestEntityConfiguration());
     }
 }

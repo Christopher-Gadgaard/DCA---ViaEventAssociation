@@ -11,6 +11,8 @@ public class ViaGuestId :ViaId
     {
   
     }
+    private ViaGuestId(){}
+    public static ViaGuestId FromGuid(Guid value) => new ViaGuestId(value);
     
     public static OperationResult<ViaGuestId> Create()
     {
