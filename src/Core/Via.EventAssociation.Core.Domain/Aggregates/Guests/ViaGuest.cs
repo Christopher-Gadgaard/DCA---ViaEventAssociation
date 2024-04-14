@@ -15,8 +15,9 @@ public class ViaGuest:AggregateRoot<ViaGuestId>
     internal ViaGuestName ViaGuestName => _viaGuestName;
     internal ViaEmail ViaEmail => _viaEmail;
     
+    private ViaGuest(){}
  
-    public ViaGuest( ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail):base(viaGuestId)
+    internal ViaGuest( ViaGuestId viaGuestId, ViaGuestName viaGuestName, ViaEmail viaEmail):base(viaGuestId)
     {
         _viaGuestName = viaGuestName;
         _viaEmail = viaEmail;

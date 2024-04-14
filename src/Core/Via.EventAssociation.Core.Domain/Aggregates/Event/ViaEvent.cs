@@ -48,6 +48,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         _invitations = new List<ViaInvitation>();
         _invitationRequests = new List<ViaInvitationRequest>();
     }
+    
+    public ViaEvent()
+    {}
 
     public static OperationResult<ViaEvent> Create(ViaEventId id)
     {
