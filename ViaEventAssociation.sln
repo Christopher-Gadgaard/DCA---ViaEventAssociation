@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaEventAssociation.Core.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaEventAssociation.Core.AppEntry", "src\Core\ViaEventAssociation.Core.AppEntry\ViaEventAssociation.Core.AppEntry.csproj", "{02273229-E544-48AD-977E-8A388939798C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{BF45EA4E-F6C3-4472-A6BB-599839BAC673}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfcDmPersistence", "src\Infrastructure\EfcDmPersistence\EfcDmPersistence.csproj", "{AFA674CF-A6D4-48C1-8C0E-2FBEC48E3FDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,8 @@ Global
 		{5B8A7CFD-8321-4F4B-A53B-1FD3C7972C29} = {050AA275-A80C-4005-95CC-BFE78A493EDF}
 		{B83C7A4C-645F-4FB4-9237-038B31F2E6D1} = {050AA275-A80C-4005-95CC-BFE78A493EDF}
 		{02273229-E544-48AD-977E-8A388939798C} = {050AA275-A80C-4005-95CC-BFE78A493EDF}
+		{BF45EA4E-F6C3-4472-A6BB-599839BAC673} = {3CE7B297-C779-454D-B178-84985CA22D1E}
+		{AFA674CF-A6D4-48C1-8C0E-2FBEC48E3FDD} = {BF45EA4E-F6C3-4472-A6BB-599839BAC673}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D809EAFE-5643-49EA-94C3-D4CB4285AB63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -69,5 +75,9 @@ Global
 		{02273229-E544-48AD-977E-8A388939798C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02273229-E544-48AD-977E-8A388939798C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02273229-E544-48AD-977E-8A388939798C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA674CF-A6D4-48C1-8C0E-2FBEC48E3FDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA674CF-A6D4-48C1-8C0E-2FBEC48E3FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA674CF-A6D4-48C1-8C0E-2FBEC48E3FDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA674CF-A6D4-48C1-8C0E-2FBEC48E3FDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
