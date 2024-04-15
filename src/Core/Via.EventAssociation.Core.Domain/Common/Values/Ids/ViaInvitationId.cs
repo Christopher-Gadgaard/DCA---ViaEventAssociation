@@ -5,9 +5,16 @@ namespace Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 public class ViaInvitationId:ViaId
 {
-    public ViaInvitationId(Guid value) : base(value)
+    private ViaInvitationId(Guid value) : base(value)
     {
         
+    }
+    
+    public static ViaInvitationId FromGuid(Guid value) => new(value);
+
+    public Guid ToGuid()
+    {
+        return this.Value;
     }
     public static OperationResult<ViaInvitationId> Create()
     {
@@ -16,11 +23,7 @@ public class ViaInvitationId:ViaId
     }
     public static OperationResult<ViaInvitationId> Create(string id)
     {
-        if (Guid.TryParse(id, out var guid))
-        {
-            return new ViaInvitationId(guid);
-        }
-        return OperationResult<ViaInvitationId>.Failure( new List<OperationError>( new []{new OperationError(ErrorCode.InvalidInput, "Invalid id")}));
+        return Guid.TryParse(id, out var guid) ? new ViaInvitationId(guid) : OperationResult<ViaInvitationId>.Failure( new List<OperationError>( new []{new OperationError(ErrorCode.InvalidInput, "Invalid id")}));
     }
     protected override IEnumerable<object> GetEqualityComponents()
     {

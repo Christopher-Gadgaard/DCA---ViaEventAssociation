@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Via.EventAssociation.Core.Domain.Aggregates.Event;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
-using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
-using Via.EventAssociation.Core.Domain.Common.Values;
 using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
 namespace EfcDmPersistence.ViaEventPersistence;
@@ -16,49 +14,79 @@ public class ViaEventEntityConfiguration : IEntityTypeConfiguration<ViaEvent>
         builder.HasKey(entity => entity.Id);
 
         builder
-            .Property(m => m.Id).HasConversion(mId => mId.Value, dbValue => ViaEventId.FromGuid(dbValue));
+            .Property(m => m.Id)
+            .HasConversion(mId => mId.Value, dbValue => ViaEventId.FromGuid(dbValue));
 
-        builder.ComplexProperty<ViaEventTitle>(
-            "Title",
-            propBuilder => { propBuilder.Property(email => email.Value).HasColumnName("Event Title"); });
-
-        builder.ComplexProperty<ViaEventDescription>(
-            "Description",
-            propBuilder => { propBuilder.Property(email => email.Value).HasColumnName("Event Description"); });
-
-        builder.OwnsOne<ViaDateTimeRange>("DateTimeRange", propBuilder =>
+        builder.OwnsOne(m => m.Title, a =>
         {
-            propBuilder.Property(start => start.StartValue)
-                .HasColumnName("Start Date");
-
-            propBuilder.Property(end => end.EndValue)
-                .HasColumnName("End Date");
+            a.Property(t => t.Value).HasColumnName("EventTitle");
         });
 
-        builder.ComplexProperty<ViaMaxGuests>(
-            "MaxGuests",
-            propBuilder => { propBuilder.Property(email => email.Value).HasColumnName("Max Guest"); });
-
-
-        builder.Property<ViaEventStatus>("Status").HasConversion(status => status.ToString(),
-            value => (ViaEventStatus) Enum.Parse(typeof(ViaEventStatus), value));
-
-        builder.Property<ViaEventVisibility>("Visibility").HasConversion(visibility => visibility.ToString(),
-            value => (ViaEventVisibility) Enum.Parse(typeof(ViaEventVisibility), value));
-
-
-        builder.OwnsMany<ViaGuestId>("Guests", valueBuilder =>
+        builder.OwnsOne(m => m.Description, a =>
         {
-            valueBuilder.Property<int>("Id").ValueGeneratedOnAdd();
-            valueBuilder.HasKey("Id");
-            valueBuilder.Property(x => x.Value);
+            a.Property(t => t.Value).HasColumnName("EventDescription");
         });
 
-        /*builder.OwnsMany<ViaInvitation>("Invitations", valueBuilder =>
+        builder.OwnsOne(m => m.DateTimeRange, dateTimeRange =>
         {
-            valueBuilder.Property<int>("Id").ValueGeneratedOnAdd();
-            valueBuilder.HasKey("Id");
-            valueBuilder.Property(x => x.Value);
-        });*/
+            dateTimeRange.Property(d => d.StartValue).HasColumnName("StartDate");
+            dateTimeRange.Property(d => d.EndValue).HasColumnName("EndDate");
+        });
+
+        builder.OwnsOne(m => m.MaxGuests, a =>
+        {
+            a.Property(t => t.Value).HasColumnName("MaxGuests");
+        });
+
+        builder
+            .Property(e => e.Status)
+            .HasConversion(
+                e => e.ToString(),
+                e => (ViaEventStatus)Enum.Parse(typeof(ViaEventStatus), e)
+            );
+
+        builder
+            .Property(e => e.Visibility)
+            .HasConversion(
+                e => e.ToString(),
+                e => (ViaEventVisibility)Enum.Parse(typeof(ViaEventVisibility), e)
+            );
+
+        builder.OwnsMany(m => m.Guests, a =>
+        {
+            a.WithOwner().HasForeignKey("ViaEventId");
+            a.Property<int>("Id").ValueGeneratedOnAdd();
+            a.HasKey("Id");
+        });
+        
+        
+        builder.OwnsMany<ViaInvitation>("Invitations", invitations =>
+        {
+            invitations.WithOwner().HasForeignKey("ViaEventId");
+            invitations.Property<ViaInvitationId>("Id")
+                .HasColumnName("InvitationId")
+                .HasConversion(
+                    id => id.ToGuid(), // Convert from ViaInvitationId to Guid
+                    guid => ViaInvitationId.FromGuid(guid) // Convert from Guid to ViaInvitationId
+                );
+
+            
+            
+            
+            invitations.Property<ViaInvitationStatus>("Status")
+                .HasConversion(
+                    status => status.ToString(),
+                    status => (ViaInvitationStatus)Enum.Parse(typeof(ViaInvitationStatus), status)
+                )
+                .HasColumnName("Status");
+
+            invitations.Property<Guid>("ViaEventId")
+                .HasColumnName("EventId")
+                .HasConversion(id => id, id => id);
+
+            invitations.Property<Guid>("ViaGuestId")
+                .HasColumnName("GuestId")
+                .HasConversion(id => id, id => id);
+        });
     }
 }

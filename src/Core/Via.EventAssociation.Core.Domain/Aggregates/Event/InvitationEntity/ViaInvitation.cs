@@ -7,35 +7,30 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
 public class ViaInvitation
 {
     
-    private ViaInvitationId _id;
-    private ViaEventId _viaEventId;
-    private ViaGuestId _viaGuestId;
-    private ViaInvitationStatus _status;
-    
-    internal ViaInvitationId Id => _id;
-    internal ViaEventId ViaEventId => _viaEventId;
-    internal ViaGuestId ViaGuestId => _viaGuestId;
-    internal ViaInvitationStatus Status => _status;
-    public ViaInvitation(ViaInvitationId id, ViaEventId viaEventId, ViaGuestId viaGuestId)
-  
+    internal ViaInvitationId Id { get; private set; }
+    internal ViaEventId ViaEventId { get; private set; }
+    internal ViaGuestId ViaGuestId { get; private set; }
+    internal ViaInvitationStatus Status { get; private set; }
+    internal ViaInvitation(ViaInvitationId id, ViaEventId viaEventId, ViaGuestId viaGuestId)
     {
-        _id = id;
-        _viaEventId = viaEventId;
-        _viaGuestId = viaGuestId;
-        _status = ViaInvitationStatus.Pending;
+        Id = id;
+        ViaEventId = viaEventId;
+        ViaGuestId = viaGuestId;
+        Status = ViaInvitationStatus.Pending;
     }
+    
     public static OperationResult<ViaInvitation> Create(ViaInvitationId invitationId, ViaEventId viaEventId, ViaGuestId viaGuestId)
     {
         return new ViaInvitation( invitationId,viaEventId, viaGuestId);
     }
     public OperationResult<ViaInvitation> Accept()
     {
-        _status = ViaInvitationStatus.Accepted;
+        Status = ViaInvitationStatus.Accepted;
         return this;
     }
     public OperationResult<ViaInvitation> Reject()
     {
-        _status = ViaInvitationStatus.Rejected;
+        Status = ViaInvitationStatus.Rejected;
         return this;
     }
 }
