@@ -7,8 +7,7 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 public class ViaEventTitle : ValueObject
 {
     internal string Value { get; }
-
-    private ViaEventTitle() { }
+    
     private ViaEventTitle(string value) => Value = value;
 
     public static OperationResult<ViaEventTitle> Create(string title)

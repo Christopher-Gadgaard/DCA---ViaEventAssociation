@@ -6,12 +6,9 @@ namespace Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 
 public class ViaEventDescription : ValueObject
 {
-    public string Value { get; private init; }
+    internal string Value { get; }
 
-    private ViaEventDescription(string value)
-    {
-        Value = value;
-    }
+    private ViaEventDescription(string value) => Value = value;
 
     public static OperationResult<ViaEventDescription> Create(string description)
     {
@@ -36,10 +33,9 @@ public class ViaEventDescription : ValueObject
     }
 
     internal static ViaEventDescription Default() => new("");
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
-
 }
