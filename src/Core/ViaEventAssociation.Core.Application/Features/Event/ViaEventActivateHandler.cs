@@ -17,7 +17,7 @@ public class ViaEventActivateHandler : ICommandHandler<ViaEventActivateCommand>
         (_eventRepository, _unitOfWork, _timeProvider) = (eventRepository, unitOfWork, timeProvider);
     public async Task<OperationResult> HandleAsync(ViaEventActivateCommand command)
     {
-        var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
+        var viaEvent = await _eventRepository.GetAsync(command.Id);
         var result = viaEvent.Activate(_timeProvider);
 
         if (result.IsFailure)

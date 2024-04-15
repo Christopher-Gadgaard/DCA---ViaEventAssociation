@@ -12,6 +12,16 @@ public class FakeInvitationRepository:IViaInvitationRepository
         return Task.FromResult(viaInvitation);
     }
 
+    public Task<ViaInvitation> GetAsync(ViaId id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveAsync(ViaId id)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task AddAsync(ViaInvitation entity)
     {
         return Task.CompletedTask;

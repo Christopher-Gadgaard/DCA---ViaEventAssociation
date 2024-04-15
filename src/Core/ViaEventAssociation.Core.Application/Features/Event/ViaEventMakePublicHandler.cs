@@ -16,7 +16,7 @@ public class ViaEventMakePublicHandler : ICommandHandler<ViaEventMakePublicComma
 
     public async Task<OperationResult> HandleAsync(ViaEventMakePublicCommand command)
     {
-        var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
+        var viaEvent = await _eventRepository.GetAsync(command.Id);
         var result = viaEvent.MakePublic();
 
         if (result.IsFailure)

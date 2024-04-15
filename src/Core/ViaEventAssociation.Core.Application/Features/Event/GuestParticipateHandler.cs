@@ -28,13 +28,13 @@ internal class GuestParticipateHandler:ICommandHandler<GuestParticipateCommand>
     
     public async Task<OperationResult> HandleAsync(GuestParticipateCommand command)
     {
-        ViaEvent? viaEvent= await _eventRepository.GetByIdAsync(command.EventId);
+        ViaEvent? viaEvent= await _eventRepository.GetAsync(command.EventId);
         if(viaEvent == null)
         {
             return OperationResult.Failure(new List<OperationError>{new(ErrorCode.NotFound, "Event not found")});
         }
         
-        ViaGuest? viaGuest = await _guestRepository.GetByIdAsync(command.GuestId);
+        ViaGuest? viaGuest = await _guestRepository.GetAsync(command.GuestId);
         if(viaGuest == null)
         {
             return OperationResult.Failure(new List<OperationError>{new(ErrorCode.NotFound, "Guest not found")});
@@ -47,7 +47,7 @@ internal class GuestParticipateHandler:ICommandHandler<GuestParticipateCommand>
         }
         if(result.IsSuccess)
         {
-            await _eventRepository.UpdateAsync(viaEvent);
+            await _eventRepository.AddAsync(viaEvent);
             await _unitOfWork.SaveChangesAsync();
         }
 

@@ -29,13 +29,13 @@ internal class GuestCancelsParticipationHandler : ICommandHandler<GuestCancelsPa
 
     public async Task<OperationResult> HandleAsync(GuestCancelsParticipationCommand command)
     {
-        ViaEvent? viaEvent = await _eventRepository.GetByIdAsync(command.EventId);
+        ViaEvent? viaEvent = await _eventRepository.GetAsync(command.EventId);
         if (viaEvent == null)
         {
             return OperationResult.Failure(new List<OperationError> { new(ErrorCode.NotFound, "Event not found") });
         }
 
-        ViaGuest? viaGuest = await _guestRepository.GetByIdAsync(command.GuestId);
+        ViaGuest? viaGuest = await _guestRepository.GetAsync(command.GuestId);
         if (viaGuest == null)
         {
             return OperationResult.Failure(new List<OperationError> { new(ErrorCode.NotFound, "Guest not found") });
@@ -45,8 +45,8 @@ internal class GuestCancelsParticipationHandler : ICommandHandler<GuestCancelsPa
       
         if (result.IsSuccess)
         {
-            await _eventRepository.UpdateAsync(viaEvent);
-            await _guestRepository.UpdateAsync(viaGuest);
+            await _eventRepository.AddAsync(viaEvent);
+            await _guestRepository.AddAsync(viaGuest);
             await _unitOfWork.SaveChangesAsync();
         }
 

@@ -18,7 +18,7 @@ public class ViaEventReadyHandler : ICommandHandler<ViaEventReadyCommand>
 
     public async Task<OperationResult> HandleAsync(ViaEventReadyCommand command)
     {
-        var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
+        var viaEvent = await _eventRepository.GetAsync(command.Id);
         var result = viaEvent.Ready(_timeProvider);
 
         if (result.IsFailure)

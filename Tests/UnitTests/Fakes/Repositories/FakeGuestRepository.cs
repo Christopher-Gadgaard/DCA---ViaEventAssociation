@@ -17,6 +17,17 @@ public class FakeGuestRepository:IViaGuestRepository
     {
         Guests.Add(viaGuest);
     }
+
+    public Task<ViaGuest> GetAsync(ViaGuestId id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveAsync(ViaGuestId id)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task AddAsync(ViaGuest entity)
     {
         return Task.CompletedTask;

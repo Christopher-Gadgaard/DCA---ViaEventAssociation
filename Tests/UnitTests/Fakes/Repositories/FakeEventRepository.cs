@@ -21,6 +21,16 @@ public class FakeEventRepository : IViaEventRepository
         return Task.FromResult(viaEvent);
     }
 
+    public Task<ViaEvent> GetAsync(ViaId id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveAsync(ViaId id)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task AddAsync(ViaEvent entity)
     {
         Events.Add(entity);

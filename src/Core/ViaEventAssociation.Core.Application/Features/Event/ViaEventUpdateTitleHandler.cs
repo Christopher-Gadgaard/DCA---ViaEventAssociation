@@ -16,7 +16,7 @@ public class ViaEventUpdateTitleHandler : ICommandHandler<ViaEventUpdateTitleCom
 
     public async Task<OperationResult> HandleAsync(ViaEventUpdateTitleCommand command)
     {
-        var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
+        var viaEvent = await _eventRepository.GetAsync(command.Id);
         var result = viaEvent.UpdateTitle(command.Title); //TODO: ASK ABOUT THIS
 
         if (result.IsFailure)

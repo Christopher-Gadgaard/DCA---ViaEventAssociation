@@ -16,7 +16,7 @@ public class ViaEventUpdateTimeRangeHandler : ICommandHandler<ViaEventUpdateTime
 
     public async Task<OperationResult> HandleAsync(ViaEventUpdateTimeRangeCommand command)
     {
-        var viaEvent = await _eventRepository.GetByIdAsync(command.Id);
+        var viaEvent = await _eventRepository.GetAsync(command.Id);
         var result = viaEvent.UpdateDateTimeRange(command.DateTimeRange);
 
         if (result.IsFailure)
