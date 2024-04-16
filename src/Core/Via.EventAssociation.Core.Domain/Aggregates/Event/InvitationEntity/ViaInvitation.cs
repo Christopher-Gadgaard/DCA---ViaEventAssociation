@@ -33,4 +33,6 @@ public class ViaInvitation
         Status = ViaInvitationStatus.Rejected;
         return this;
     }
+    
+    private ViaInvitation(){}
 }
