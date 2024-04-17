@@ -23,9 +23,9 @@ public class ViaEvent : AggregateRoot<ViaEventId>
     internal IEnumerable<ViaGuestId> Guests => _guests;
     internal IEnumerable<ViaInvitation> Invitations => _invitations;
 
-    private List<ViaGuestId> _guests;
-    private List<ViaInvitation> _invitations;
-    private List<ViaInvitationRequest> _invitationRequests;
+    private readonly List<ViaGuestId> _guests;
+    private readonly List<ViaInvitation> _invitations;
+   
     
     private bool IsFull => _guests.Count >= MaxGuests.Value;
     
@@ -46,7 +46,6 @@ public class ViaEvent : AggregateRoot<ViaEventId>
         Visibility = visibility;
         _guests = new List<ViaGuestId>();
         _invitations = new List<ViaInvitation>();
-        _invitationRequests = new List<ViaInvitationRequest>();
     }
     
     private ViaEvent()

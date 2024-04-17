@@ -1,8 +1,10 @@
-﻿namespace Via.EventAssociation.Core.Domain.Common.Bases;
+﻿using Via.EventAssociation.Core.Domain.Common.Values.Ids;
 
-public abstract class AggregateRoot<T> : Entity<T>
+namespace Via.EventAssociation.Core.Domain.Common.Bases;
+
+public abstract class AggregateRoot<TId> : Entity<TId> where TId : ViaId
 {
-    protected AggregateRoot(T id) : base(id)
+    protected AggregateRoot(TId id) : base(id)
     {
     }
 

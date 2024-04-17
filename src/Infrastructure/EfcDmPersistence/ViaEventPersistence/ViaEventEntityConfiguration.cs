@@ -59,36 +59,25 @@ public class ViaEventEntityConfiguration : IEntityTypeConfiguration<ViaEvent>
                     mId => mId.Value,
                     dbValue => ViaInvitationId.FromGuid(dbValue)
                 );
-            invitations.WithOwner().HasForeignKey(inv => inv.ViaEventId);
 
+            invitations.WithOwner().HasForeignKey(inv => inv.ViaEventId);
             invitations
                 .Property(inv => inv.ViaEventId)
                 .HasConversion(
                     mId => mId.Value,
                     dbValue => ViaEventId.FromGuid(dbValue)
                 );
-            // invitations.Property<ViaInvitationId>("Id")
-            //     .HasColumnName("InvitationId")
-            //     .HasConversion(
-            //         id => id.ToGuid(), // Convert from ViaInvitationId to Guid
-            //         guid => ViaInvitationId.FromGuid(guid) // Convert from Guid to ViaInvitationId
-            //     );
 
+           // invitations.WithOwner().HasForeignKey(inv => inv.ViaGuestId);
+            invitations.Property(inv => inv.ViaGuestId)
+                .HasConversion(mId => mId.Value, dbValue => ViaGuestId.FromGuid(dbValue));
 
-            /*invitations.Property<ViaInvitationStatus>("Status")
+            invitations.Property<ViaInvitationStatus>("Status")
                 .HasConversion(
                     status => status.ToString(),
-                    status => (ViaInvitationStatus)Enum.Parse(typeof(ViaInvitationStatus), status)
+                    status => (ViaInvitationStatus) Enum.Parse(typeof(ViaInvitationStatus), status)
                 )
                 .HasColumnName("Status");
-
-            invitations.Property<Guid>("ViaEventId")
-                .HasColumnName("EventId")
-                .HasConversion(id => id, id => id);
-
-            invitations.Property<Guid>("ViaGuestId")
-                .HasColumnName("GuestId")
-                .HasConversion(id => id, id => id);*/
         });
     }
 }

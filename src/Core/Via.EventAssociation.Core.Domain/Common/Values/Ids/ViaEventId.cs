@@ -13,7 +13,6 @@ public class ViaEventId : ViaId
         return this.Value;
     }
     public static ViaEventId FromGuid(Guid value) => new ViaEventId(value);
-    // private ViaEventId(Guid guid)=>Value=guid;
     public static OperationResult<ViaEventId> Create()
     {
         var id = Guid.NewGuid();

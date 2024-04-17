@@ -3,7 +3,4 @@ using Via.EventAssociation.Core.Domain.Contracts;
 
 namespace Via.EventAssociation.Core.Domain.Aggregates.Event;
 
-public interface IViaEventRepository: IViaRepository<ViaEvent, ViaId>
-{
-    
-}
+public interface IViaEventRepository: IViaRepository<ViaEvent, ViaId>{}
