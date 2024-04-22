@@ -1,6 +1,5 @@
 ﻿using Via.EventAssociation.Core.Domain.Aggregates.Event.Enums;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
-using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationRequestEntity;
 using Via.EventAssociation.Core.Domain.Aggregates.Event.Values;
 using Via.EventAssociation.Core.Domain.Common.Bases;
 using Via.EventAssociation.Core.Domain.Common.Values;
