@@ -14,6 +14,10 @@ public class ViaGuestId : ViaId
         return Value;
     }
 
+    private ViaGuestId()
+    {
+        
+    }
     public static ViaGuestId FromGuid(Guid value) => new ViaGuestId(value);
 
     public static OperationResult<ViaGuestId> Create()
