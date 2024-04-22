@@ -15,20 +15,21 @@ public class RegisterGuestCommand
         Guest = guest;
     }
     
-    public static OperationResult<RegisterGuestCommand> Create(string firstName, string lastName, string email, ICheckEmailInUse emailChecker)
+    public static OperationResult<RegisterGuestCommand> Create(string firstName, string lastName, string email, string profilePicURL, ICheckEmailInUse emailChecker)
     {
    
      OperationResult<ViaGuestName> guestNameResult = ViaGuestName.Create(firstName, lastName);
     OperationResult<ViaEmail> emailResult = ViaEmail.Create(email, emailChecker);
+    OperationResult<ViaProfilePicUrl> profilePicUrlResult = ViaProfilePicUrl.Create(profilePicURL);
     OperationResult<RegisterGuestCommand> combinedResult =
        
-      OperationResult<RegisterGuestCommand>.Combine(guestNameResult.OperationErrors, emailResult.OperationErrors);
+      OperationResult<RegisterGuestCommand>.Combine(guestNameResult.OperationErrors, emailResult.OperationErrors, profilePicUrlResult.OperationErrors);
 
     if (combinedResult.IsFailure)
     {
         return OperationResult<RegisterGuestCommand>.Failure(combinedResult.OperationErrors);   
     }
-    OperationResult<ViaGuest> guestResult = ViaGuest.Create(ViaGuestId.Create().Payload, guestNameResult, emailResult);
+    OperationResult<ViaGuest> guestResult = ViaGuest.Create(ViaGuestId.Create().Payload, guestNameResult, emailResult, profilePicUrlResult);
     
     if(guestResult.IsFailure)
     {

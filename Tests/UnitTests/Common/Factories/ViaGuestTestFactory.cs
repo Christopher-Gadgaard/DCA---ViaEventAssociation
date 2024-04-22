@@ -16,8 +16,9 @@ public abstract class ViaGuestTestFactory
         var emailCheckerMock = new Mock<ICheckEmailInUse>();
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var viaEmail = ViaEmail.Create(email, emailCheckerMock.Object).Payload;
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
 
-        return new ViaGuest(viaGuestId, viaGuestName, viaEmail);
+        return new ViaGuest(viaGuestId, viaGuestName, viaEmail, profilePicUrl);
 
     }
 }

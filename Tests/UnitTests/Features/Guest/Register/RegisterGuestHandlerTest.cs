@@ -19,7 +19,7 @@ public class RegisterGuestHandlerTest
     {
         //Arrange
         var emailChecker = new Mock<ICheckEmailInUse>();
-        var command = RegisterGuestCommand.Create("Vlad", "Lazar", "308826@via.dk", emailChecker.Object).Payload;
+        var command = RegisterGuestCommand.Create("Vlad", "Lazar", "308826@via.dk", "https://via.dk",emailChecker.Object).Payload;
 
         Assert.Equal("308826@via.dk", command.Guest.ViaEmail.Value);
         IUnitOfWork unitOfWork = new FakeUnitOfWork();

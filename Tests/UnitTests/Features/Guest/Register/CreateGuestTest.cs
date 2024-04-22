@@ -18,8 +18,9 @@ public class CreateGuestTest
         var email = "john@via.dk";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
         // Act
-        var result = ViaGuest.Create(guestId, guestName.Payload, emailResult);
+        var result = ViaGuest.Create(guestId, guestName.Payload, emailResult, profilePicUrl);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -41,10 +42,11 @@ public class CreateGuestTest
         var email = "john@gmail.com";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
 
 
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult, profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -61,9 +63,10 @@ public class CreateGuestTest
         var email = "invalidemail";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
 
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult, profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -78,9 +81,10 @@ public class CreateGuestTest
         var email = "john@via.dk";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
 
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult, profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -95,9 +99,10 @@ public class CreateGuestTest
         var email = "john@via.dk";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
 
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult , profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -112,9 +117,9 @@ public class CreateGuestTest
         var email = "john@via.dk";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
-
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult , profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -130,9 +135,11 @@ public class CreateGuestTest
         var email = "john@via.dk";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
+
 
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult, profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -147,9 +154,10 @@ public class CreateGuestTest
         var email = "john@via.dk";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
 
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult, profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -166,9 +174,10 @@ public class CreateGuestTest
         var email = "john@via.dk";
         emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(false);
         var emailResult = ViaEmail.Create(email, emailCheckerMock.Object);
+        var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
 
         // Act
-        var result = ViaGuest.Create(guestId, guestNameResult, emailResult);
+        var result = ViaGuest.Create(guestId, guestNameResult, emailResult, profilePicUrl);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -183,11 +192,12 @@ public class CreateGuestTest
              var email = "john@via.dk";
             var emailCheckerMock = new Mock<ICheckEmailInUse>();
             emailCheckerMock.Setup(service => service.IsEmailRegistered(email)).Returns(true);
-            
+            var profilePicUrl = ViaProfilePicUrl.Create("https://via.dk");
+
             // Act
             var emailCopy = ViaEmail.Create(email, emailCheckerMock.Object);
             var result = ViaGuest.Create(ViaGuestId.Create().Payload, ViaGuestName.Create("John", "Doe").Payload,
-                emailCopy);
+                emailCopy, profilePicUrl);
 
 
             // Assert

@@ -13,7 +13,7 @@ public class RegisterGuestCommandTest
     {
         //Arrange
         var emailChecker =new Mock<ICheckEmailInUse>();
-        var result=RegisterGuestCommand.Create("Vlad","Lazar", "308826@via.dk",emailChecker.Object);
+        var result=RegisterGuestCommand.Create("Vlad","Lazar", "308826@via.dk",  "https://via.dk",emailChecker.Object );
         
         //Assert
         Assert.True(result.IsSuccess);
@@ -25,7 +25,7 @@ public class RegisterGuestCommandTest
     {
         //Arrange
         var emailChecker = new Mock<ICheckEmailInUse>();
-        var result = RegisterGuestCommand.Create("", "Lazar", "3088@via.dk", emailChecker.Object);
+        var result = RegisterGuestCommand.Create("", "Lazar", "3088@via.dk","https://via.dk", emailChecker.Object);
 
         //Assert
         Assert.True(result.IsFailure);
@@ -36,7 +36,7 @@ public class RegisterGuestCommandTest
     {
         //Arrange
         var emailChecker = new Mock<ICheckEmailInUse>();
-        var result = RegisterGuestCommand.Create("Vlad", "", "308826@via.dk", emailChecker.Object);
+        var result = RegisterGuestCommand.Create("Vlad", "", "308826@via.dk", "https://via.dk",emailChecker.Object);
 
         //Assert
         Assert.True(result.IsFailure);
@@ -47,7 +47,7 @@ public class RegisterGuestCommandTest
     {
         //Arrange
         var emailChecker = new Mock<ICheckEmailInUse>();
-        var result = RegisterGuestCommand.Create("Vlad", "Lazar", "", emailChecker.Object);
+        var result = RegisterGuestCommand.Create("Vlad", "Lazar", "", "https://via.dk",emailChecker.Object);
 
         //Assert
         Assert.True(result.IsFailure);
