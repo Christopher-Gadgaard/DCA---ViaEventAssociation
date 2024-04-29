@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ViaEventAssociation.Infrastructure.EfcQueries;
+namespace ViaEventAssociation.Infrastructure.EfcQueries.DTOs;
 
 public partial class ViaInvitation
 {

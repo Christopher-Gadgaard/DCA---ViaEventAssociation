@@ -13,9 +13,11 @@ public class QueryDispatcher(IServiceProvider serviceProvider) : IQueryDispatche
 
         if (handler == null)
         {
-            throw new NotImplementedException();
+            throw new QueryHandlerNotFoundException(query.GetType().Name, typeof(TAnswer).Name);
         }
 
         return handler.HandleAsync((dynamic) query);
     }
 }
+public class QueryHandlerNotFoundException(string queryType, string answerType)
+    : Exception($"Query handler for query {queryType} with answer type {answerType} not found.");
