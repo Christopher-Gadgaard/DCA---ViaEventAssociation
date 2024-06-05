@@ -1,0 +1,147 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\DCA1\\DCA-ViaEventAssociation\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{32559AB3-3BBE-4226-BF31-C4C509D95AD7}|ViaEventAssociation.Core.Tools.ObjectMapper\\ViaEventAssociation.Core.Tools.ObjectMapper.csproj|c:\\dca1\\dca-viaeventassociation\\viaeventassociation.core.tools.objectmapper\\imappingconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32559AB3-3BBE-4226-BF31-C4C509D95AD7}|ViaEventAssociation.Core.Tools.ObjectMapper\\ViaEventAssociation.Core.Tools.ObjectMapper.csproj|solutionrelative:viaeventassociation.core.tools.objectmapper\\imappingconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32559AB3-3BBE-4226-BF31-C4C509D95AD7}|ViaEventAssociation.Core.Tools.ObjectMapper\\ViaEventAssociation.Core.Tools.ObjectMapper.csproj|c:\\dca1\\dca-viaeventassociation\\viaeventassociation.core.tools.objectmapper\\imapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32559AB3-3BBE-4226-BF31-C4C509D95AD7}|ViaEventAssociation.Core.Tools.ObjectMapper\\ViaEventAssociation.Core.Tools.ObjectMapper.csproj|solutionrelative:viaeventassociation.core.tools.objectmapper\\imapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{70DD6245-8367-4B43-986E-F54E0853ED9A}|src\\Presentation\\ViaEventAssociation.Presentation.WebAPI\\ViaEventAssociation.Presentation.WebAPI.csproj|c:\\dca1\\dca-viaeventassociation\\src\\presentation\\viaeventassociation.presentation.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{70DD6245-8367-4B43-986E-F54E0853ED9A}|src\\Presentation\\ViaEventAssociation.Presentation.WebAPI\\ViaEventAssociation.Presentation.WebAPI.csproj|solutionrelative:src\\presentation\\viaeventassociation.presentation.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B83C7A4C-645F-4FB4-9237-038B31F2E6D1}|src\\Core\\ViaEventAssociation.Core.Application\\ViaEventAssociation.Core.Application.csproj|c:\\dca1\\dca-viaeventassociation\\src\\core\\viaeventassociation.core.application\\extensions\\applicationextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B83C7A4C-645F-4FB4-9237-038B31F2E6D1}|src\\Core\\ViaEventAssociation.Core.Application\\ViaEventAssociation.Core.Application.csproj|solutionrelative:src\\core\\viaeventassociation.core.application\\extensions\\applicationextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D809EAFE-5643-49EA-94C3-D4CB4285AB63}|Documentation\\Docs\\Docs.csproj|c:\\dca1\\dca-viaeventassociation\\documentation\\docs\\assignment8\\ui.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{D809EAFE-5643-49EA-94C3-D4CB4285AB63}|Documentation\\Docs\\Docs.csproj|solutionrelative:documentation\\docs\\assignment8\\ui.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D809EAFE-5643-49EA-94C3-D4CB4285AB63}|Documentation\\Docs\\Docs.csproj|c:\\dca1\\dca-viaeventassociation\\documentation\\docs\\assignment8\\img_1.png||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{D809EAFE-5643-49EA-94C3-D4CB4285AB63}|Documentation\\Docs\\Docs.csproj|solutionrelative:documentation\\docs\\assignment8\\img_1.png||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02273229-E544-48AD-977E-8A388939798C}|src\\Core\\ViaEventAssociation.Core.AppEntry\\ViaEventAssociation.Core.AppEntry.csproj|c:\\dca1\\dca-viaeventassociation\\src\\core\\viaeventassociation.core.appentry\\commands\\event\\guestcancelsparticipationcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{02273229-E544-48AD-977E-8A388939798C}|src\\Core\\ViaEventAssociation.Core.AppEntry\\ViaEventAssociation.Core.AppEntry.csproj|solutionrelative:src\\core\\viaeventassociation.core.appentry\\commands\\event\\guestcancelsparticipationcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 306,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IMappingConfig.cs",
+              "DocumentMoniker": "C:\\DCA1\\DCA-ViaEventAssociation\\ViaEventAssociation.Core.Tools.ObjectMapper\\IMappingConfig.cs",
+              "RelativeDocumentMoniker": "ViaEventAssociation.Core.Tools.ObjectMapper\\IMappingConfig.cs",
+              "ToolTip": "C:\\DCA1\\DCA-ViaEventAssociation\\ViaEventAssociation.Core.Tools.ObjectMapper\\IMappingConfig.cs",
+              "RelativeToolTip": "ViaEventAssociation.Core.Tools.ObjectMapper\\IMappingConfig.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T21:04:17.271Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IMapper.cs",
+              "DocumentMoniker": "C:\\DCA1\\DCA-ViaEventAssociation\\ViaEventAssociation.Core.Tools.ObjectMapper\\IMapper.cs",
+              "RelativeDocumentMoniker": "ViaEventAssociation.Core.Tools.ObjectMapper\\IMapper.cs",
+              "ToolTip": "C:\\DCA1\\DCA-ViaEventAssociation\\ViaEventAssociation.Core.Tools.ObjectMapper\\IMapper.cs",
+              "RelativeToolTip": "ViaEventAssociation.Core.Tools.ObjectMapper\\IMapper.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T21:03:32.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ApplicationExtensions.cs",
+              "DocumentMoniker": "C:\\DCA1\\DCA-ViaEventAssociation\\src\\Core\\ViaEventAssociation.Core.Application\\Extensions\\ApplicationExtensions.cs",
+              "RelativeDocumentMoniker": "src\\Core\\ViaEventAssociation.Core.Application\\Extensions\\ApplicationExtensions.cs",
+              "ToolTip": "C:\\DCA1\\DCA-ViaEventAssociation\\src\\Core\\ViaEventAssociation.Core.Application\\Extensions\\ApplicationExtensions.cs",
+              "RelativeToolTip": "src\\Core\\ViaEventAssociation.Core.Application\\Extensions\\ApplicationExtensions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T20:56:18.744Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\DCA1\\DCA-ViaEventAssociation\\src\\Presentation\\ViaEventAssociation.Presentation.WebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "src\\Presentation\\ViaEventAssociation.Presentation.WebAPI\\Program.cs",
+              "ToolTip": "C:\\DCA1\\DCA-ViaEventAssociation\\src\\Presentation\\ViaEventAssociation.Presentation.WebAPI\\Program.cs",
+              "RelativeToolTip": "src\\Presentation\\ViaEventAssociation.Presentation.WebAPI\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T20:48:44.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UI.md",
+              "DocumentMoniker": "C:\\DCA1\\DCA-ViaEventAssociation\\Documentation\\Docs\\Assignment8\\UI.md",
+              "RelativeDocumentMoniker": "Documentation\\Docs\\Assignment8\\UI.md",
+              "ToolTip": "C:\\DCA1\\DCA-ViaEventAssociation\\Documentation\\Docs\\Assignment8\\UI.md",
+              "RelativeToolTip": "Documentation\\Docs\\Assignment8\\UI.md",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2024-06-05T15:42:10.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "img_1.png",
+              "DocumentMoniker": "C:\\DCA1\\DCA-ViaEventAssociation\\Documentation\\Docs\\Assignment8\\img_1.png",
+              "RelativeDocumentMoniker": "Documentation\\Docs\\Assignment8\\img_1.png",
+              "ToolTip": "C:\\DCA1\\DCA-ViaEventAssociation\\Documentation\\Docs\\Assignment8\\img_1.png",
+              "RelativeToolTip": "Documentation\\Docs\\Assignment8\\img_1.png",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2024-06-05T15:42:05.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GuestCancelsParticipationCommand.cs",
+              "DocumentMoniker": "C:\\DCA1\\DCA-ViaEventAssociation\\src\\Core\\ViaEventAssociation.Core.AppEntry\\Commands\\Event\\GuestCancelsParticipationCommand.cs",
+              "RelativeDocumentMoniker": "src\\Core\\ViaEventAssociation.Core.AppEntry\\Commands\\Event\\GuestCancelsParticipationCommand.cs",
+              "ToolTip": "C:\\DCA1\\DCA-ViaEventAssociation\\src\\Core\\ViaEventAssociation.Core.AppEntry\\Commands\\Event\\GuestCancelsParticipationCommand.cs",
+              "RelativeToolTip": "src\\Core\\ViaEventAssociation.Core.AppEntry\\Commands\\Event\\GuestCancelsParticipationCommand.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T15:09:49.248Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
