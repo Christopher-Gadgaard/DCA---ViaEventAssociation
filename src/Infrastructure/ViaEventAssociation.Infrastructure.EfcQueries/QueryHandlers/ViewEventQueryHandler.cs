@@ -19,7 +19,7 @@ public class ViewEventQueryHandler
             .Where(i => i.ViaEventId == query.EventId && i.Status == "Accepted")
             .Select(i => i.ViaGuestId)
             .ToListAsync();
-        //invited Guests
+       
         var invitedGuests = context.Guests
             .Where(g => inviteGuestIds.Contains(g.Id));
         

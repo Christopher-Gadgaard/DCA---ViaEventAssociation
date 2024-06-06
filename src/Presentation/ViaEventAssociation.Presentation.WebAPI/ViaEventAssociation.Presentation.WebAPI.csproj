@@ -14,7 +14,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\ViaEventAssociation.Core.Tools.ObjectMapper\ViaEventAssociation.Core.Tools.ObjectMapper.csproj" />
       <ProjectReference Include="..\..\Core\ViaEventAssociation.Core.Application\ViaEventAssociation.Core.Application.csproj" />
+      <ProjectReference Include="..\..\Core\ViaEventAssociation.Core.QueryContracts\ViaEventAssociation.Core.QueryContracts.csproj" />
     </ItemGroup>
 
 </Project>

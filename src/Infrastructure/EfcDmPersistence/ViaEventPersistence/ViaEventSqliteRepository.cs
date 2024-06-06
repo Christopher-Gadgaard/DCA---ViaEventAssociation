@@ -5,7 +5,8 @@ using ViaEventAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace EfcDmPersistence.ViaEventPersistence;
 
-public class ViaEventSqliteRepository(DbContext context) : RepositoryEfcBase<ViaEvent, ViaEventId>(context),IViaEventRepository
+public class ViaEventSqliteRepository(DbContext context)
+    : RepositoryEfcBase<ViaEvent, ViaEventId>(context), IViaEventRepository
 {
     public Task<ViaEvent> GetAsync(ViaId id)
     {
@@ -24,6 +25,4 @@ public class ViaEventSqliteRepository(DbContext context) : RepositoryEfcBase<Via
         await context.Set<ViaEvent>().AddAsync(viaEvent);
         await context.SaveChangesAsync();
     }
-    
-    
 }

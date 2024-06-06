@@ -2,7 +2,7 @@
 
 namespace EfcDmPersistence.UnitOfWork;
 
-public class SqliteUnitOfWork(ViaDbContext context):IUnitOfWork
+public class SqliteUnitOfWork(ViaDbContext context) : IUnitOfWork
 {
     public Task SaveChangesAsync() => context.SaveChangesAsync();
 }

@@ -1,5 +1,4 @@
-﻿using Via.EventAssociation.Core.Domain.Aggregates.Event.InvitationEntity;
-using ViaEventAssociation.Core.QueryContracts.Contracts;
+﻿using ViaEventAssociation.Core.QueryContracts.Contracts;
 
 namespace ViaEventAssociation.Core.QueryContracts.Queries;
 
